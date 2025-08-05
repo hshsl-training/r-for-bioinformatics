@@ -1,6 +1,6 @@
 ---
-title: "Class Title Here"
-author: "Amy Yarnell, Author2, Author3"
+title: "R for Bioinformatics"
+author: "Amy Yarnell"
 title-block-banner: white
 title-block-banner-color: black
 navbar:
@@ -17,12 +17,7 @@ css: styles.scss
 
 
 
-**Schedule**
 
-| Date | Topic                     |
-|------|---------------------------|
-| TBD  | TBD |
-| TBD  | TBD  |
 
 
 ## Acknowledgements

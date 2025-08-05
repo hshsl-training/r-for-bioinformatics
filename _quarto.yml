@@ -7,7 +7,7 @@ project:
   
 
 website:
-  title: "CDABS Class Title Here"
+  title: "R For Bioinformatics"
   page-footer:
     right: |
       [![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg){fig-alt="CC BY" width=125px}](https://creativecommons.org/licenses/by-sa/4.0/)
