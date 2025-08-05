@@ -1,0 +1,44 @@
+project:
+  type: website
+  render:
+  - "index.qmd"
+  - "*.Rmd"
+  - "*.md"
+  
+
+website:
+  title: "CDABS Class Title Here"
+  page-footer:
+    right: |
+      [![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg){fig-alt="CC BY" width=125px}](https://creativecommons.org/licenses/by-sa/4.0/)
+  # repo-url: "add URL here"
+  repo-actions: [edit, issue]
+  navbar:
+    background: "#c5251d"
+    logo: https://www2.hshsl.umaryland.edu/hshsl/bin/img/logo_white@2x.png
+    logo-alt: HSHSL logo
+    logo-href: https://www2.hshsl.umaryland.edu/cdabs/
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+     # - sidebar:sidebar id - repeat as needed for sidebar entries
+    
+
+  #sidebar:
+   # - id: sidebar id from above
+     # title: "Human readable sidebar section name name"
+     # style: "docked"
+     # background: light
+     # collapse-level: 2
+     # contents:
+     # - "file path, repeat as needed"
+      
+
+format:
+  html:
+    theme: 
+    - yeti
+    - custom.scss
+    editor: source
+    toc: true

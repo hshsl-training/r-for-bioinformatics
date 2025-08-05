@@ -1,0 +1,13 @@
+/* css styles */
+.quarto-title-block .quarto-title-banner {
+  background-image: url(https://www2.hshsl.umaryland.edu/hshsl/bin/img/logo_white@2x.png);
+  background-repeat: no-repeat;
+  padding-left: 10px;
+  background-origin: content-box;
+  
+}
+
+.scrolling {
+  max-height: 400px;
+  overflow-y: auto;
+}
