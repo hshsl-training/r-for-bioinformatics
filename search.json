@@ -12,5 +12,40 @@
     "title": "R for Bioinformatics",
     "section": "License",
     "text": "License\nThis work is licensed under a Creative Commons Attribution 4.0 International License (CC BY)"
+  },
+  {
+    "objectID": "01-GettingSetUp.html",
+    "href": "01-GettingSetUp.html",
+    "title": "Introduction and Set Up",
+    "section": "",
+    "text": "Note: This lesson assumes some basic familiarity with R, RStudio, and the tidyverse."
+  },
+  {
+    "objectID": "01-GettingSetUp.html#learning-objectives",
+    "href": "01-GettingSetUp.html#learning-objectives",
+    "title": "Introduction and Set Up",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nUnderstand the difference between CRAN and Bioconductor\nBe able to install Bioinformatics packages"
+  },
+  {
+    "objectID": "01-GettingSetUp.html#getting-set-up",
+    "href": "01-GettingSetUp.html#getting-set-up",
+    "title": "Introduction and Set Up",
+    "section": "Getting Set Up",
+    "text": "Getting Set Up\nRStudio provides a useful feature called Projects which act like a container for your work. As you use R more, you will find it useful to make sure your files and environment for one real-world project are kept together and separate from other projects.\nLet’s create a new project now.\n\nGo to File &gt; New Project\nIn Create project from menu choose New Directory\nChoose Project Type New Project\nMake sure Create project as subdirectory of: is pointing to Desktop (or whatever your preferred location is)\nCall your new directory r_bioinformatics_lesson\nSelect the check box that says Open in New Session\nInside your new project, create folders called data and figures"
+  },
+  {
+    "objectID": "01-GettingSetUp.html#what-is-bioconductor",
+    "href": "01-GettingSetUp.html#what-is-bioconductor",
+    "title": "Introduction and Set Up",
+    "section": "What is Bioconductor?",
+    "text": "What is Bioconductor?\nIn this lesson, we’ll be working with a number of bioinformatics packages along with the tidyverse family of packages. Many R packages come from CRAN (Comprehensive R Archive Network). Packages from CRAN can be installed either by using the Install Packages widget in RStudio (lower-right pane) or with the function install.packages().\nBioconductor is an open-source project that provides tools for the analysis and comprehension of high-throughput biological data, built on the R programming language. It includes a large ecosystem of packages for tasks such as sequence analysis, genomic data visualization, and statistical modeling in bioinformatics. Bioconductor emphasizes reproducibility, interoperability, and the integration of biological metadata, making it especially well-suited for omics research.\nTo use packages from Bioconductor, we must first install and load the Biocmanager package from CRAN. Biocmanager provides an interface to the Bioconductor repository.\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n    install.packages(\"BiocManager\")\n\nlibrary(BiocManager)\n\nNext, let’s install the packages we will be using in this session. From CRAN, we’ll be installing\n\n\n\nPackage Name\nPurpose\n\n\n\n\ntidyverse\nWrangling and visualizing data\n\n\nrentrez\nAccessing data from NCBI databases\n\n\nape\nPhylogenetic analysis\n\n\n\n\ninstall.packages(c(\"tidyverse\", \"rentrez\", \"ape\"))\n\nThen we can install our Bioconductor packages with Biocmanager\n\n\n\nPackage Name\nPurpose\n\n\n\n\nBiostrings\nManipulating biological sequences\n\n\npwalign\nPairwise Alignment\n\n\nDECIPHER\nMultiple Sequence Alignment\n\n\n\n\nBiocManager::install(c(\"Biostrings\", \"pwalign\", \"DECIPHER\"))\n\nNOTE: You only need to install a package once on your system (and after updates), but you will want to load the packages into your R session with the library() function.\n\nlibrary(ape)\n\nWarning: package 'ape' was built under R version 4.4.3\n\nlibrary(Biostrings)\n\nWarning: package 'Biostrings' was built under R version 4.4.2\n\n\nLoading required package: BiocGenerics\n\n\n\nAttaching package: 'BiocGenerics'\n\n\nThe following objects are masked from 'package:stats':\n\n    IQR, mad, sd, var, xtabs\n\n\nThe following objects are masked from 'package:base':\n\n    anyDuplicated, aperm, append, as.data.frame, basename, cbind,\n    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,\n    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,\n    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,\n    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,\n    table, tapply, union, unique, unsplit, which.max, which.min\n\n\nLoading required package: S4Vectors\n\n\nLoading required package: stats4\n\n\n\nAttaching package: 'S4Vectors'\n\n\nThe following object is masked from 'package:utils':\n\n    findMatches\n\n\nThe following objects are masked from 'package:base':\n\n    expand.grid, I, unname\n\n\nLoading required package: IRanges\n\n\nWarning: package 'IRanges' was built under R version 4.4.2\n\n\n\nAttaching package: 'IRanges'\n\n\nThe following object is masked from 'package:grDevices':\n\n    windows\n\n\nLoading required package: XVector\n\n\nLoading required package: GenomeInfoDb\n\n\nWarning: package 'GenomeInfoDb' was built under R version 4.4.2\n\n\n\nAttaching package: 'Biostrings'\n\n\nThe following object is masked from 'package:ape':\n\n    complement\n\n\nThe following object is masked from 'package:base':\n\n    strsplit\n\nlibrary(DECIPHER)\nlibrary(pwalign)\n\n\nAttaching package: 'pwalign'\n\n\nThe following objects are masked from 'package:Biostrings':\n\n    aligned, alignedPattern, alignedSubject, compareStrings, deletion,\n    errorSubstitutionMatrices, indel, insertion, mismatchSummary,\n    mismatchTable, nedit, nindel, nucleotideSubstitutionMatrix,\n    pairwiseAlignment, PairwiseAlignments,\n    PairwiseAlignmentsSingleSubject, pid, qualitySubstitutionMatrices,\n    stringDist, unaligned, writePairwiseAlignments\n\nlibrary(rentrez)\n\nWarning: package 'rentrez' was built under R version 4.4.3\n\nlibrary(tidyverse)\n\nWarning: package 'ggplot2' was built under R version 4.4.3\n\n\nWarning: package 'tibble' was built under R version 4.4.3\n\n\nWarning: package 'purrr' was built under R version 4.4.3\n\n\nWarning: package 'lubridate' was built under R version 4.4.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.1.0     \n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ lubridate::%within%() masks IRanges::%within%()\n✖ dplyr::collapse()     masks Biostrings::collapse(), IRanges::collapse()\n✖ dplyr::combine()      masks BiocGenerics::combine()\n✖ purrr::compact()      masks XVector::compact()\n✖ dplyr::desc()         masks IRanges::desc()\n✖ tidyr::expand()       masks S4Vectors::expand()\n✖ dplyr::filter()       masks stats::filter()\n✖ dplyr::first()        masks S4Vectors::first()\n✖ dplyr::lag()          masks stats::lag()\n✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()\n✖ purrr::reduce()       masks IRanges::reduce()\n✖ dplyr::rename()       masks S4Vectors::rename()\n✖ lubridate::second()   masks S4Vectors::second()\n✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()\n✖ dplyr::slice()        masks XVector::slice(), IRanges::slice()\n✖ dplyr::where()        masks ape::where()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nDon’t be afraid if you see a lot of text and messages printing out in the console as you go through this process. You may be asked to update other packages that the ones we are trying to install are dependent on. You will also be warned if some of the packages have functions with the same name."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
   }
 ]
