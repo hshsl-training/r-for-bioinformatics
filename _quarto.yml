@@ -7,11 +7,11 @@ project:
   
 
 website:
-  title: "R For Bioinformatics"
+  title: " "
   page-footer:
     right: |
       [![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg){fig-alt="CC BY" width=125px}](https://creativecommons.org/licenses/by-sa/4.0/)
-  # repo-url: "add URL here"
+      repo-url: "https://hshsl-training.github.io/r-for-bioinformatics/"
   repo-actions: [edit, issue]
   navbar:
     background: "#c5251d"
@@ -22,6 +22,8 @@ website:
     left:
       - text: "Home"
         file: index.qmd
+      - text: "Introduction"
+        file: 01-GettingSetUp.qmd
      # - sidebar:sidebar id - repeat as needed for sidebar entries
     
 
