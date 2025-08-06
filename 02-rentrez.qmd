@@ -1,0 +1,86 @@
+---
+title: "Accessing NCBI data with rentrez"
+editor: source
+format: html
+toc: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.height=3.5, fig.align="center")
+```
+
+
+## Learning Objectives
+
+
+## NCBI data and the **`rentrez`** package 
+
+
+## Finding and fetching a sequence
+
+```{r}
+search_tp53_hs <- entrez_search(db="gene", 
+                                term ="TP53[gene name] AND human[orgn]")
+```
+
+```{r}
+link_tp53_hs <- entrez_link(dbfrom="gene", 
+                            id=search_tp53_hs$ids, 
+                            db="nuccore")
+```
+
+```{r}
+fetch_tp53_hs <- entrez_fetch(db="nuccore",
+                              id=link_tp53_hs$links$gene_nuccore_refseqgene, 
+                              rettype = "fasta")
+```
+
+
+```{r}
+cat(fetch_tp53_hs)
+```
+
+```{r}
+writeLines(fetch_tp53_hs, "data/tp53_human.fasta")
+```
+
+
+## Manipulating sequences
+
+```{r}
+fasta <- readDNAStringSet("data/tp53_human.fasta")
+```
+
+```{r}
+dna_tp53_human <- fasta[[1]]
+```
+
+```{r}
+alphabetFrequency(dna_tp53_human)
+```
+
+```{r}
+alphabetFrequency(dna_tp53_human, baseOnly = TRUE)
+```
+
+```{r}
+gc_content <- letterFrequency(dna_tp53_human, 
+                              letters = c("G", "C"), 
+                              as.prob=TRUE)
+sum(gc_content)
+```
+
+```{r}
+tp53_comp <- complement(dna_tp53_human)
+```
+
+```{r}
+tp53_rev <- reverse(dna_tp53_human)
+```
+
+```{r}
+tp53_rev_comp <- reverseComplement(dna_tp53_human)
+```
