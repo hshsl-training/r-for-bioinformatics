@@ -13,7 +13,8 @@ knitr::opts_chunk$set(fig.width=6, fig.height=3.5, fig.align="center")
 ```
 
 ```{r}
-#|warning: false
+#| include: false
+library(BiocManager)
 library(ape)
 library(Biostrings)
 library(DECIPHER)
@@ -24,17 +25,73 @@ library(tidyverse)
 
 
 ## Learning Objectives
+- Practice putting together a bioinformatics workflow
+- Understand how to programmatically access NCBI databases
+- 
 
 
 ## NCBI data and the **`rentrez`** package 
+The [National Center for Biotechnology Information](https://www.ncbi.nlm.nih.gov/) (NCBI), a division of the National Library of Medicine, maintains several databases that provide access to a wide range of biological data and tools, including databases for DNA and protein sequences (GenBank, RefSeq), scientific literature (PubMed, PMC), and resources for analyzing genetic and genomic information (BLAST, Gene, SRA toolkit). It serves as a central hub for researchers around the world to find, share, and analyze biological data. NCBI is a major partner in the International Nucleotide Sequence Database Collaboration (INSDC) along with EMBL-EBI in Europe and DDBJ in Japan. 
+
+Entrez is the name of the integrated search system across all NCBI databases. Programmatic access to the Entrez system is provided by the [Entrez Programming Utilities](https://www.ncbi.nlm.nih.gov/books/NBK25501/) (E-utilities). The E-utilities can be used on the command line, but in this class, we will be using the **`rentrez`** package, an R interface to the program. 
+
+First, let's see what databases we can access with `rentrez`
+
+```{r}
+entrez_dbs()
+```
+
+We can also see what fields are available to search in a database
+
+```{r}
+entrez_db_searchable(db="gene")
+```
+
+The functions of `rentrez` are designed to work together. The main ones we will be using in this session are:
+
+| Function                  | Purpose                                                                 |
+|---------------------------|-------------------------------------------------------------------------|
+| `entrez_search()`         | Search a specific NCBI database and retrieve UIDs (unique identifiers). |
+| `entrez_summary()`        | Get summary metadata for UIDs returned by a search.                     |
+| `extract_from_esummary()` | Extract specific fields (e.g., title, publication date) from esummary results.|
+| `entrez_fetch()`          | Download full records (e.g., FASTA, GenBank, XML).                      |
+| `entrez_link()`           | Find related data across NCBI databases.      
+
+You can check out the [`rentrez` documentation](https://docs.ropensci.org/rentrez/)] for more information on these and other functions.
 
 
 ## Finding and fetching a sequence
 
+Let's start by searching for the record in the Gene database for human gene TP53, an important gene in the study of cancer. The `entrez_search()` function takes the following arguments:
+
+- `db`, name of the database to search for (required)
+- `term`, the search term, you can also use MeSH terms to perform your search (required)
+- `retmax`, the default of retrievable ids is 20, this argument can be used to change that number 
+- `retmode`, to select the format of your output (XML or JSON), by default will be XML
+- `use_history`, to store a history of searches in NCBI's server
+
+The `term` argument can take a simple or more complicated search string linked together with boolean terms **AND, OR, and NOT**. The name of the field like `[gene name]` or `[orgn]` comes after the search term for that field. Note that the `[orgn]` field can accept scientific or common names or organisms.
+
 ```{r}
 search_tp53_hs <- entrez_search(db="gene", 
-                                term ="TP53[gene name] AND human[orgn]")
+                                term ="TP53[gene] AND human[orgn]")
 ```
+
+### Lists
+Let's take a closer look at the results we get from our search. The `search_tp53_hs` object is a structure called a **list**. Recall that a vector is a one-dimensional data structure in R where every element must be of the same type. Lists are one-dimensional data structures where elements can be anything, even data frames or other lists. Lists are a common way to store hierarchical data, like XML or JSON data formats. You'll find that it is very common for data to be stored as a list in bioinformatics workflows.
+
+
+
+|                | **Homogeneous**                                | **Heterogeneous**                                |
+|----------------|------------------------------------------------|--------------------------------------------------|
+| **1D**         | **Vector**<br>All elements of the same type    | **List**<br>Can contain any type of R  object     |
+| **2D**         | **Matrix**<br>All elements of the same type    | **Data Frame**<br>Each column can differ in type |
+
+
+
+To access items in a list, you can use `$` or `[[]]`.
+
+
 
 ```{r}
 link_tp53_hs <- entrez_link(dbfrom="gene", 
@@ -50,6 +107,7 @@ fetch_tp53_hs <- entrez_fetch(db="nuccore",
 
 
 ```{r}
+#| output: false
 cat(fetch_tp53_hs)
 ```
 

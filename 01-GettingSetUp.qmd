@@ -95,6 +95,8 @@ BiocManager::install(c("Biostrings", "pwalign", "DECIPHER"))
 
 ```{r}
 #|warning: false
+#|message: false
+
 library(ape)
 library(Biostrings)
 library(DECIPHER)
