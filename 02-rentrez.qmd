@@ -12,6 +12,16 @@ editor_options:
 knitr::opts_chunk$set(fig.width=6, fig.height=3.5, fig.align="center")
 ```
 
+```{r}
+#|warning: false
+library(ape)
+library(Biostrings)
+library(DECIPHER)
+library(pwalign)
+library(rentrez)
+library(tidyverse)
+```
+
 
 ## Learning Objectives
 
