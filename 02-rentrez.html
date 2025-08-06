@@ -154,7 +154,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#ncbi-data-and-the-rentrez-package" id="toc-ncbi-data-and-the-rentrez-package" class="nav-link" data-scroll-target="#ncbi-data-and-the-rentrez-package">NCBI data and the <strong><code>rentrez</code></strong> package</a></li>
-  <li><a href="#finding-and-fetching-a-sequence" id="toc-finding-and-fetching-a-sequence" class="nav-link" data-scroll-target="#finding-and-fetching-a-sequence">Finding and fetching a sequence</a></li>
+  <li><a href="#finding-and-fetching-a-sequence" id="toc-finding-and-fetching-a-sequence" class="nav-link" data-scroll-target="#finding-and-fetching-a-sequence">Finding and fetching a sequence</a>
+  <ul class="collapse">
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists">Lists</a></li>
+  </ul></li>
   <li><a href="#manipulating-sequences" id="toc-manipulating-sequences" class="nav-link" data-scroll-target="#manipulating-sequences">Manipulating sequences</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/edit/main/02-rentrez.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -181,669 +184,187 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|warning: false</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ape' was built under R version 4.4.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Biostrings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'Biostrings' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: BiocGenerics</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'BiocGenerics'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    IQR, mad, sd, var, xtabs</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
-    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
-    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
-    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,
-    table, tapply, union, unique, unsplit, which.max, which.min</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: S4Vectors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: stats4</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'S4Vectors'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:utils':
-
-    findMatches</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    expand.grid, I, unname</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: IRanges</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'IRanges' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'IRanges'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:grDevices':
-
-    windows</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: XVector</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: GenomeInfoDb</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'GenomeInfoDb' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'Biostrings'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:ape':
-
-    complement</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:base':
-
-    strsplit</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DECIPHER)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwalign)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'pwalign'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:Biostrings':
-
-    aligned, alignedPattern, alignedSubject, compareStrings, deletion,
-    errorSubstitutionMatrices, indel, insertion, mismatchSummary,
-    mismatchTable, nedit, nindel, nucleotideSubstitutionMatrix,
-    pairwiseAlignment, PairwiseAlignments,
-    PairwiseAlignmentsSingleSubject, pid, qualitySubstitutionMatrices,
-    stringDist, unaligned, writePairwiseAlignments</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rentrez)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'rentrez' was built under R version 4.4.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.4.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tibble' was built under R version 4.4.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'purrr' was built under R version 4.4.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'lubridate' was built under R version 4.4.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.1.0     </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ lubridate::%within%() masks IRanges::%within%()
-✖ dplyr::collapse()     masks Biostrings::collapse(), IRanges::collapse()
-✖ dplyr::combine()      masks BiocGenerics::combine()
-✖ purrr::compact()      masks XVector::compact()
-✖ dplyr::desc()         masks IRanges::desc()
-✖ tidyr::expand()       masks S4Vectors::expand()
-✖ dplyr::filter()       masks stats::filter()
-✖ dplyr::first()        masks S4Vectors::first()
-✖ dplyr::lag()          masks stats::lag()
-✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
-✖ purrr::reduce()       masks IRanges::reduce()
-✖ dplyr::rename()       masks S4Vectors::rename()
-✖ lubridate::second()   masks S4Vectors::second()
-✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
-✖ dplyr::slice()        masks XVector::slice(), IRanges::slice()
-✖ dplyr::where()        masks ape::where()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-</div>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<ul>
+<li>Practice putting together a bioinformatics workflow</li>
+<li>Understand how to programmatically access NCBI databases</li>
+<li></li>
+</ul>
 </section>
 <section id="ncbi-data-and-the-rentrez-package" class="level2">
 <h2 class="anchored" data-anchor-id="ncbi-data-and-the-rentrez-package">NCBI data and the <strong><code>rentrez</code></strong> package</h2>
+<p>The <a href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</a> (NCBI), a division of the National Library of Medicine, maintains several databases that provide access to a wide range of biological data and tools, including databases for DNA and protein sequences (GenBank, RefSeq), scientific literature (PubMed, PMC), and resources for analyzing genetic and genomic information (BLAST, Gene, SRA toolkit). It serves as a central hub for researchers around the world to find, share, and analyze biological data. NCBI is a major partner in the International Nucleotide Sequence Database Collaboration (INSDC) along with EMBL-EBI in Europe and DDBJ in Japan.</p>
+<p>Entrez is the name of the integrated search system across all NCBI databases. Programmatic access to the Entrez system is provided by the <a href="https://www.ncbi.nlm.nih.gov/books/NBK25501/">Entrez Programming Utilities</a> (E-utilities). The E-utilities can be used on the command line, but in this class, we will be using the <strong><code>rentrez</code></strong> package, an R interface to the program.</p>
+<p>First, let’s see what databases we can access with <code>rentrez</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">entrez_dbs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "pubmed"          "protein"         "nuccore"         "ipg"            
+ [5] "nucleotide"      "structure"       "genome"          "annotinfo"      
+ [9] "assembly"        "bioproject"      "biosample"       "blastdbinfo"    
+[13] "books"           "cdd"             "clinvar"         "gap"            
+[17] "gapplus"         "grasp"           "dbvar"           "gene"           
+[21] "gds"             "geoprofiles"     "medgen"          "mesh"           
+[25] "nlmcatalog"      "omim"            "orgtrack"        "pmc"            
+[29] "proteinclusters" "pcassay"         "protfam"         "pccompound"     
+[33] "pcsubstance"     "seqannot"        "snp"             "sra"            
+[37] "taxonomy"        "biocollections"  "gtr"            </code></pre>
+</div>
+</div>
+<p>We can also see what fields are available to search in a database</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">entrez_db_searchable</span>(<span class="at">db=</span><span class="st">"gene"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Searchable fields for database 'gene'
+  ALL    All terms from all searchable fields 
+  UID    Unique number assigned to a gene record 
+  FILT   Limits the records 
+  TITL   gene or protein name 
+  WORD   Free text associated with record 
+  ORGN   scientific and common names of organism 
+  MDAT   The last date on which the record was updated 
+  CHR    Chromosome number or numbers; also 'mitochondrial', 'unknown' properties 
+  MV     Chromosomal map location as displayed in MapViewer 
+  GENE   Symbol or symbols of the gene 
+  ECNO   EC number for enzyme or CAS registry number 
+  MIM    MIM number from OMIM 
+  DIS    Name(s) of diseases associated with this gene. When available, OMIM name will be used 
+  ACCN   Nucleotide or protein accession(s) associated with this gene 
+  UGEN   UniGene cluster number for this gene 
+  PROP   Properties of Gene record 
+  CDAT   The date on which this record first appeared 
+  NCAC   nucleotide accessions of sequences 
+  NUID   nucleotide uids of sequences 
+  PACC   protein accessions 
+  PUID   protein uids 
+  PMID   PubMed ids of accessions linked to the record 
+  TID    taxonomy id 
+  GO     Gene Ontology 
+  DOM    Domain Name 
+  DDAT   The date on which the record was discontinued 
+  CPOS   Chromosome base position 
+  GFN    Gene full name 
+  PFN    Protein full name 
+  GL     Gene length 
+  XC     Exon count 
+  GRP    Relationships for this gene 
+  PREF   Preferred symbol of the gene 
+  AACC   Assembly accession 
+  ASM    Assembly name 
+  EXPR   Gene expression </code></pre>
+</div>
+</div>
+<p>The functions of <code>rentrez</code> are designed to work together. The main ones we will be using in this session are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 73%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>entrez_search()</code></td>
+<td>Search a specific NCBI database and retrieve UIDs (unique identifiers).</td>
+</tr>
+<tr class="even">
+<td><code>entrez_summary()</code></td>
+<td>Get summary metadata for UIDs returned by a search.</td>
+</tr>
+<tr class="odd">
+<td><code>extract_from_esummary()</code></td>
+<td>Extract specific fields (e.g., title, publication date) from esummary results.</td>
+</tr>
+<tr class="even">
+<td><code>entrez_fetch()</code></td>
+<td>Download full records (e.g., FASTA, GenBank, XML).</td>
+</tr>
+<tr class="odd">
+<td><code>entrez_link()</code></td>
+<td>Find related data across NCBI databases.</td>
+</tr>
+</tbody>
+</table>
+<p>You can check out the <a href="https://docs.ropensci.org/rentrez/"><code>rentrez</code> documentation</a>] for more information on these and other functions.</p>
 </section>
 <section id="finding-and-fetching-a-sequence" class="level2">
 <h2 class="anchored" data-anchor-id="finding-and-fetching-a-sequence">Finding and fetching a sequence</h2>
+<p>Let’s start by searching for the record in the Gene database for human gene TP53, an important gene in the study of cancer. The <code>entrez_search()</code> function takes the following arguments:</p>
+<ul>
+<li><code>db</code>, name of the database to search for (required)</li>
+<li><code>term</code>, the search term, you can also use MeSH terms to perform your search (required)</li>
+<li><code>retmax</code>, the default of retrievable ids is 20, this argument can be used to change that number</li>
+<li><code>retmode</code>, to select the format of your output (XML or JSON), by default will be XML</li>
+<li><code>use_history</code>, to store a history of searches in NCBI’s server</li>
+</ul>
+<p>The <code>term</code> argument can take a simple or more complicated search string linked together with boolean terms <strong>AND, OR, and NOT</strong>. The name of the field like <code>[gene name]</code> or <code>[orgn]</code> comes after the search term for that field. Note that the <code>[orgn]</code> field can accept scientific or common names or organisms.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>search_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_search</span>(<span class="at">db=</span><span class="st">"gene"</span>, </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">term =</span><span class="st">"TP53[gene name] AND human[orgn]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>search_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_search</span>(<span class="at">db=</span><span class="st">"gene"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">term =</span><span class="st">"TP53[gene] AND human[orgn]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="lists" class="level3">
+<h3 class="anchored" data-anchor-id="lists">Lists</h3>
+<p>Let’s take a closer look at the results we get from our search. The <code>search_tp53_hs</code> object is a structure called a <strong>list</strong>. Recall that a vector is a one-dimensional data structure in R where every element must be of the same type. Lists are one-dimensional data structures where elements can be anything, even data frames or other lists. Lists are a common way to store hierarchical data, like XML or JSON data formats. You’ll find that it is very common for data to be stored as a list in bioinformatics workflows.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 42%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Homogeneous</strong></th>
+<th><strong>Heterogeneous</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1D</strong></td>
+<td><strong>Vector</strong><br>All elements of the same type</td>
+<td><strong>List</strong><br>Can contain any type of R object</td>
+</tr>
+<tr class="even">
+<td><strong>2D</strong></td>
+<td><strong>Matrix</strong><br>All elements of the same type</td>
+<td><strong>Data Frame</strong><br>Each column can differ in type</td>
+</tr>
+</tbody>
+</table>
+<p>To access items in a list, you can use <code>$</code> or <code>[[]]</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_link</span>(<span class="at">dbfrom=</span><span class="st">"gene"</span>, </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">id=</span>search_tp53_hs<span class="sc">$</span>ids, </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">db=</span><span class="st">"nuccore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>fetch_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_fetch</span>(<span class="at">db=</span><span class="st">"nuccore"</span>,</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">id=</span>link_tp53_hs<span class="sc">$</span>links<span class="sc">$</span>gene_nuccore_refseqgene, </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rettype =</span> <span class="st">"fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(fetch_tp53_hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&gt;NG_017013.2 Homo sapiens tumor protein p53 (TP53), RefSeqGene (LRG_321) on chromosome 17
-CTCCTTGGTTCAAGTAATTCTCCTGCCTCAGACTCCAGAGTAGCTGGGATTACAGGCGCCCGCCACCACG
-CCCAGCTAATTTTTTGTATTTTTAATAGAGATGGGGTTTCATCATGTTGGCCAGGCTGGTCTCGAACTCC
-TGACCTCAGGTGATCCACCTGCCTCAGCCTCCCAAAGTGCTGGGATTACAGGAGTCAGCCACCGCACCCA
-GCCCCAACTAATTTTTGTATTTGAGTAGAGACAGGGTTTTACCATGTTGGCCAGGCTGGTCTAAAACTCT
-TCACCTCAGGTGATCCACCCATCTCAGCCTCCCAAAGTGTTGGGATTACAGGCGTGAGCCACCGTGCCTG
-GCCCTGGATTTCACTCTTGCCCACCCATAAACCATTCACTCTTCTGTTTTAAAACTCTCTTGGCCGGGCG
-CAGTGGCTCATGCCTGTAATCCCAGCACTTTGGGAGGCCAAGGTGGGCAGATCACAAGGTCAGGAGTTCG
-AGACCAGCCTGGCCAATATGATGAACCCCCCATCTCTACTAAAAAAATACAAAAAAATTAGCCGGGTGTG
-GTGGCACATGCCTGTAATCCCAGCTACTCGGAAGGTTGAGGCAGGAGAATCACTTAAACCTGGGAGGCGG
-AGGTTGCGGTGAGCTGAGATGGTGCCACTGCACTCCAGCCTGGACAACAGAGCAAGACTCTGTCTCAAAC
-AAACAAACAAAAAAAACCTCTCTCATGGCCTGGCATGGTGGCTCACGCCTGTAATCCTAGCACTTTGGAA
-GGCTGAGGCAGGTGGATCACCTGAGGTCAGGAGTTTGAGACCAGCCAGGCCAACGTGGCAAAACCTGTCT
-CTACTAAAAATACAAAAATTAAGCCAGGCGCGGTGGCTCATGCCTATAATCCCAGCACTTTGGGAGGCCG
-AGACCGGCGGATCAAATGTCAGGAGTACGAGACCATCCTGGCCAATATGGTAAAACCCCGTCTCTATTTA
-AAAAAATACAAAAATTAGCTGGGCATGGTGGCGGGTGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCA
-GGAGAATCGCTTGAATCCAGGAGGCAGAGGTTGCAGTGAGCCGAGATCACGCCATTGCACTCCAGCCTGG
-GCGACAGAGCAAGACTCGTCTCAAAAAAAAAAAAAAAACACCTCTCTCATGACTTCCCAAATAAACTCCA
-AATGCCTTACCCATAAGAACCAACACGACGTGGCTGCTCTTCTCTGTCCTCACCCCTCTGTCCCCCTCAC
-TTGCCTCAGTCTGGCTATACCAGCATTCTGGGTTTTTTGTTTTGTGTTTGTTTGTTTGTTTGTTTGTTTG
-TTTGTTTGTTTTGGGATGGAGTCTCACTCTGTCACCCAGGCTGGAGTGCAGTGACATGATCTTGGCTCAC
-TGCAACCTCCATCTCCTGGGTTCAAATGATTCTTCTGCTTCAGCCTCTCAAGTAGCTGGGATTACAGGCA
-CCCACCATCACACCCAGCTAATTTTTGTATTTTTGTAGAGATGAGGTTTTGCCATGTTGGCCAGGCTGGT
-CTCAAACTCTTGACCTCAGGTGATCTGCCCACCTCAGCCTCCCAAAGTGCTGGGATTACAGGTGTGAGCC
-ACTGAGCCCAGTCTGTTTTGTTGTTTTTTGAGATGGAGTCTCACTCTGTCGCCCAGGCTGGAGTGCAGTG
-GTACAATTTTGTCTGACTGCAGCCTCCACCTCCTGAGTTTAAGAGATTCTCCTGCCTCAGCCACACAAGT
-AGCTGGGATTACAGGCGCGTGCCACCACATGCGTCTAATTTTGGTATTTTTAGTAGCGATGGGGTTTTGC
-CATATTGGCCAGGCTGGTCTCGAACTCCTGGCCTCAAGTGATCTGCACACCTCGGCCTCCTGAGTAGCTG
-GGATTACAGGCGTGAGCCACCATGCAGGGCCTTTCTGGTCTTTTAACGCACAAAGCTATTTCCCAGTTCT
-GGGTGTTTATAGTATCATTGCCAGTTCCTGGAAAGCTCTTTCCAGAAGCCTTCACATGACTGATCCCTTA
-TCCTCCTTCAGGTCTTAGCTCAAATGCCTCCTTTTCAGAGAGCTCCTTCCTGACCATTTTATGCAATGTG
-CTTTCCTCTAGTTAGTCTCTCTTCATTCTGTGTATTTCCTTCAGAGCATTTATCATCATCTTGGTCCTGA
-TGCTTGCTGGTTTACATGTTTGTTGTCTGTCTCCCACACAGAAAGCAAACCAGCCCTTCATCTGTCTTGT
-CCACCACTTTATCCCAGCACAGTGACTAACATATATCAGTAGTCAATCAATAAATAGCTATAAGCCAGGC
-ACGGTGACTCACACCTGTGATCCCCGCACTTTGGGAGGCCAAGGTGGGCGGATCCTCTGAGGTCAGGAAT
-TTGATATCAGCCTGCCCAACATGGCGAAACCCCGTCTCTACTAAAACTATAAAAATTAGTCGAGTGTGAT
-GGCGTGCGCCTGTAATACCAGCTACTTGTGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCAGAG
-GTTGCAGTGAGCCGAGATCACACCACAGCACTCCAGCCTGGGTGACAGAGCAAGACCTTGTCTCAAAAAA
-ATAAGAAATAGAAATATATATATGCTGCCACAAGAAATTCACTACTTTTTAGCAAAAAACACAGATTCCT
-AATTAAAGAAAGGGGAAACCTCTCTCTAAATAACTTCAGAATTCGGGGCAGAAAACGCTACATGTGGAAA
-CTCGTCTTGAAAAACAGTCCCGTTTGTGAACAGGAAACACTTGGACTACACTTTTTCCATCTCCACGAAG
-GACTTAAATGTGCAGCATTGATGAAGAGGCAGTTAGCCCCAGTCCTTACCATTTCTGCATATTCCACCTG
-CTCCCCCTCATGGTACAGCTCTGGGGGCAGGTTATAAATTCGCAAGATGTTATCAGCACTATTGGTCAAG
-ATGCAGGAACCGTCAGGAGCCCTAGAAACAGGGGAGAGTTAGAAAGCTGGCCAGACCTATGCTTTTCAAG
-TGTAGGGCTAGGGCTGAGCCTGCCTCTGGGGTAGGTAAGCCCCCCTGAATCCTTGAGGGAAGTAGAAGAC
-ACAAACTGCTAGATAAAATGTAAGCTCAGTCTAAAAGGGCTACGTGCCGCTTCTCCCAGCTCTGGGGCAT
-CCCTCTCCTAGAAAACTGGACTGTTTTACAGTGAAAATCTCGGGGGTGGTCAGCTCCCTGCCCCGTTGTT
-ATCCTTACCACTTACAGCCTTTCAAGAAGTTCTCAGGTTGGGTGCTGAACTCTGACCAGGAACCACTGAG
-AAATCGAGGCAGCTGGGAGAAGCTGTAGTTCCAAGCGCTGAAAGGAAGATGGGGGACAATAAACCTGGGT
-CGCCAAGCAAAGGGGGCAGAGGCCTGGAGAAGTGGGTCTCAGGACCAGAGGACAGATCGACCTCACACTT
-CATCTCCCCAGACTCCACACTCCACTGCCATCACCACTTACGTGTCTCCCTCGTCCTCTGCAGCGGGTTC
-CCCAGAGGTATCTTCCATGGCTTTTCCAGACCCCAACTCTGGCCCGTTCGCTTCTTCTTCAGAAAGGCTC
-CCGTTTGCTTCTTCTGCAGGAAGGCTTGTATTTTCAGAAAGTTCTTGCTCCTCGATTCGAGGACTCAACT
-CACTAGGGGAACCAAACTCTGTTTCCAGGGGAGTGGAGAGAGAAACTGGGTCCCCCTCCCGTAGCTCCTG
-GGACACAGCTGAGCCAGCCACAGGATCTGGGGACAACCGGGGCGGATCCCCCCTTTCGGGAGGCGGTGGC
-ATCAGTTCAGAGTCCGCATTTTTATTCATCGGGGAAGCGTGGGGAGAAGGATGGGCTGGAGCTGGGTCCT
-GGTCTGAAGGACAGCAGTCCGGAGCTAACGGTTGAGTCTCCAAAGTCTTCATACTGCAGAGGAAGCACAG
-CGGAGATTAGCCTCAGCCAGGATGGCTTCGAAGTTCTCAGGGATCCGACGCAGAGCTAAAGAAACCCACC
-TGTGCTTCCCTCCTCTTCTGGGAGTAGGCAGAAGACTCCCGGGAGGAGAGGCGAACAGCGGACGCCAATT
-CTTTTGAAAGCACTGTGTTCCTTAGCACCGCGGGTCGCTACGGGCCTCTTGCTGTCGCGGGATTTCGGTC
-CACCTTCCGATTGGGCCGCCGCATCCCGGATCAGATTTCGCGGGCGACCCACGGAACCCGCGGAGCCGGG
-ACGTGAAAGGTTAGAAGGTTTCCCGTTCCCATCAAGCCCTAGGGCTCCTCGTGGCTGCTGGGAGTTGTAG
-TCTGAACGCTTCTATCTTGGCGAGAAGCGCCTACGCTCCCCCTACCGAGTCCCGCGGTAATTCTTAAAGC
-ACCTGCACCGCCCCCCCGCCGCCTGCAGAGGGCGCAGCAGGTCTTGCACCTCTTCTGCATCTCATTCTCC
-AGGCTTCAGACCTGTCTCCCTCATTCAAAAAATATTTATTATCGAGCTCTTACTTGCTACCCAGCACTGA
-TATAGGCACTCAGGAATACAACAATGAATAAGATAGTAGAAAAATTCTATATCCTCATAAGGCTTACGTT
-TCCATGTACTGAAAGCAATGAACAAATAAATCTTATCAGAGTGATAAGGGTTGTGAAGGAGATTAAATAA
-GATGGTGTGATATAAAGTATCTGGGAGAAAACGTTAGGGTGTGATATTACGGAAAGCCTTCCTAAAAAAT
-GACATTTTAACTGATGAGAAGAAAGGATCCAGCTGAGAGCAAACGCAAAAGCTTTCTTCCTTCCACCCTT
-CATATTTGACACAATGCAGGATTCCTCCAAAATGATTTCCACCAATTCTGCCCTCACAGCTCTGGCTTGC
-AGAATTTTCCACCCCAAAATGTTAGTATCTACGGCACCAGGTCGGCGAGAATCCTGACTCTGCACCCTCC
-TCCCCAACTCCATTTCCTTTGCTTCCTCCGGCAGGCGGATTACTTGCCCTTACTTGTCATGGCGACTGTC
-CAGCTTTGTGCCAGGAGCCTCGCAGGGGTTGATGGGATTGGGGTTTTCCCCTCCCATGTGCTCAAGACTG
-GCGCTAAAAGTTTTGAGCTTCTCAAAAGTCTAGAGCCACCGTCCAGGGAGCAGGTAGCTGCTGGGCTCCG
-GGGACACTTTGCGTTCGGGCTGGGAGCGTGCTTTCCACGACGGTGACACGCTTCCCTGGATTGGGTAAGC
-TCCTGACTGAACTTGATGAGTCCTCTCTGAGTCACGGGCTCTCGGCTCCGTGTATTTTCAGCTCGGGAAA
-ATCGCTGGGGCTGGGGGTGGGGCAGTGGGGACTTAGCGAGTTTGGGGGTGAGTGGGATGGAAGCTTGGCT
-AGAGGGATCATCATAGGAGTTGCATTGTTGGGAGACCTGGGTGTAGATGATGGGGATGTTAGGACCATCC
-GAACTCAAAGTTGAACGCCTAGGCAGAGGAGTGGAGCTTTGGGGAACCTTGAGCCGGCCTAAAGCGTACT
-TCTTTGCACATCCACCCGGTGCTGGGCGTAGGGAATCCCTGAAATAAAAGATGCACAAAGCATTGAGGTC
-TGAGACTTTTGGATCTCGAAACATTGAGAACTCATAGCTGTATATTTTAGAGCCCATGGCATCCTAGTGA
-AAACTGGGGCTCCATTCCGAAATGATCATTTGGGGGTGATCCGGGGAGCCCAAGCTGCTAAGGTCCCACA
-ACTTCCGGACCTTTGTCCTTCCTGGAGCGATCTTTCCAGGCAGCCCCCGGCTCCGCTAGATGGAGAAAAT
-CCAATTGAAGGCTGTCAGTCGTGGAAGTGAGAAGTGCTAAACCAGGGGTTTGCCCGCCAGGCCGAGGAGG
-ACCGTCGCAATCTGAGAGGCCCGGCAGCCCTGTTATTGTTTGGCTCCACATTTACATTTCTGCCTCTTGC
-AGCAGCATTTCCGGTTTCTTTTTGCCGGAGCAGCTCACTATTCACCCGATGAGAGGGGAGGAGAGAGAGA
-GAAAATGTCCTTTAGGCCGGTTCCTCTTACTTGGCAGAGGGAGGCTGCTATTCTCCGCCTGCATTTCTTT
-TTCTGGATTACTTAGTTATGGCCTTTGCAAAGGCAGGGGTATTTGTTTTGATGCAAACCTCAATCCCTCC
-CCTTCTTTGAATGGTGTGCCCCACCCCGCGGGTCGCCTGCAACCTAGGCGGACGCTACCATGGCGTGAGA
-CAGGGAGGGAAAGAAGTGTGCAGAAGGCAAGCCCGGAGGTATTTTCAAGAATGAGTATATCTCATCTTCC
-CGGAGGAAAAAAAAAAAGAATGGGTACGTCTGAGAATCAAATTTTGAAAGAGTGCAATGATGGGTCGTTT
-GATAATTTGTCGGAAAAACAATCTACCTGTTATCTAGCTTTGGGCTAGGCCATTCCAGTTCCAGACGCAG
-GCTGAACGTCGTGAAGCGGAAGGGGCGGGCCCGCAGGCGTCCGTGTGGTCCTCCGTGCAGCCCTCCGGCC
-CGAGCCGGTTCTTCCTGGTAGGAGGCGGAACTCGAATTCATTTCTCCCGCTGCCCCATCTCTTAGCTCGC
-GGTTGTTTCATTCCGCAGTTTCTTCCCATGCACCTGCCGCGTACCGGCCACTTTGTGCCGTACTTACGTC
-ATCTTTTTCCTAAATCGAGGTGGCATTTACACACAGCGCCAGTGCACACAGCAAGTGCACAGGAAGATGA
-GTTTTGGCCCCTAACCGCTCCGTGATGCCTACCAAGTCACAGACCCTTTTCATCGTCCCAGAAACGTTTC
-ATCACGTCTCTTCCCAGTCGATTCCCGACCCCACCTTTATTTTGATCTCCATAACCATTTTGCCTGTTGG
-AGAACTTCATATAGAATGGAATCAGGCTGGGCGCTGTGGCTCACGCCTGCACTTTGGGAGGCCGAGGCGG
-GCGGATTACTTGAGGATAGGAGTTCCAGACCAGCGTGGCCAACGTGGTGAATCCCCGTCTCTACTAAAAA
-ATACAAAAATTAGCTGGGCGTGGTGGGTGCCTGTAATCCCAGCTATTCGGGAGGGTGAGGCAGGAGAATC
-GCTTGAACCCGGGAGGCAGAGGTTGCAGTGAGCCAAGATCGTGCCACTACACTCCAGCCTGGGCGACAAG
-AACGAAACTCCGTCTCAAAAAAAAGGGGGGAATCATACATTATGTGCTCATTTTTGTCGGGCTTCTGTCC
-TTCAATGTACTGTCTGACATTCGTTCATGTTGTATATATCAGTATTTTGCTCCTTTTCATTTAGTATAGT
-CCATCGATTGTATATCCGTCCTTTTGATGGCCTTTTGAGTTGTTTCCCATTTGCGGTTATGAAATAAAGC
-TGCTATAAACATTCTTGTACAATTCTTTTTGTGATCATATGTTTTCGTGTTTCTTGGAGAAATACTTAGG
-AGGGGAATTGCGAGTTTGGAAGTAAAAAGTAGCTGTATTTTGAACTTTTTCAGAAGCTCTGAGTTTTCCA
-GAGCGGTTGTACCATTTTACACTCCAACTAGCAAGGTATGGGAGTTATTATGGTTGTGCCACAGCCTTCC
-GGACATTAGGTATTGTCAGTCTTTCTAATGTGGTATATCCTTGTGGTTGTAATTTACAGTTCTCTATTGA
-CTAAGGATGTTCAGCATTTTTTCATGTGCCTATTGGCCATTCGTATTTTGTTTGTAAAGTAGCTCTTCGA
-GTCTTTTACCTGTTATTTTGGTTTTTTGTTTGTTTTTATTGTTCAGTTGTGGGACTGCTTTATACATTCT
-GGATACAAGTCCTTTATCAGATCCATGTGTCGTGAATGTTTTCTTCTGATCTGTTGCTTGCCTATTTGTT
-TGCTTTACAGAGTTTACAGTATCTTAAGAGGAGTGGATTTATCTTTTTTATGTTCAGTATTTGCCTTGTC
-CTGTTTAGGACATCTTTTTTTTTTTTTTTAACCCCAGGGTCATGAAGATATTATCTTACATTTTCTTTTA
-GGACCTTTATGGTTGTAAGTTTTACAGTAAGGTCCTTGAGCCATTAATTAATTCTTAAAATTAATTGTTT
-ATGGTGTGAGGTGTAGGAGTCAGTCTCTGGTATCTTTCCTGTATGGAAATCCAGTTATTCTGTCTCCACT
-TGTTGAAATAGGCTTCCTTTCTCTACTGAATGCTTTTAATTTTAATTATTTTACAGTTGGAGTATAGGGC
-TACCATTTTAGTGCTATTTTCTTTTTTTCTTTGTTAATTTTTGAGACAGGGACTCACACTGTTGCCCAGG
-CTAGAGTACAATGGCACAATCAAGGCTTACTGCAGCCTCGAACCCCTGGGCTCAAGCAGTCCTCTAGCAG
-CCTCACGAGTAGCTGGGATTACTCCACCACACCCAGCTAACTATTTTATTTTTTTGTATTGACAGGATCT
-CACTATGTTGCCCAGGCTGGTCTCAAACTGCTGGCCTCAAGCTTTCATCCCATCTCGGCCTCCCAAAGTG
-CTGGGATTACAGGTGTGAGCCACCATGCCTGACCTCTTAGTGCTATTTTCTATTTATCTCCTCTGTTCTC
-TGCTCTCTTTAAACGTTGGAGGAAGAAACAGTACCCATCTTACACAAACTCTTCAGAAAACAGAGGAACA
-GACTGGGCGCGGTGGCTCATACCTGTAATCTCAGCACTTTGGTACGCTGAGGCAGGGGATCATTTGAGGT
-CGGGAGTTCGAGACCAGCCTGGCCAACACGGCGAAACCCCATCTCTACTAAAAATACAAAAAGTAGCTAG
-GCGTGGTGACACATACCTGTAATGCCAGTTACTCAGGAGGCTGAGGCACAAGAATCCCTTGAACCTGGGA
-AGCGGAGGTTGCAGTGAGCCGAGATTGCGCCACTGCACTCCAGCCTGGGCAACAGAGTGAGACCCTGTCT
-CAGAAAAAAAAAGAAAGAAAGAAAAAATAGAGGAATATTTCCCAACTTGTTTTCGAAGCCAGCATAATCC
-TGGTACCAAAACCAAACAAGGACATTATAAGAAAAGAAAATATAGACCAATATTCCTGTTAGCATAGACA
-TGCAACAGCTAACCAATTTTAGCAAACCAAACCTGGTAATATAGAAAAAAGGATAAATAGGCCAGTCGCG
-GTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCTGAGGCAGGCAGATCACTTGAGGTCAGGAGTTTG
-AGACCAGCCTGACCAACATGGTGAAACCCCGTTTCTAATAAAAATACAAAAATCAGGCTGGGCACGGTGG
-CTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGTGGGCAGATCACGAGGTCAGGAGTTCAAGACCA
-GCCTGACCAATGTGGTGAAACGCCATCTCTACTAAAAATACAAAAATCAGCCGGTGTGGTGGCACCTGCC
-TGTAATCCCAGCTACTCAGGAGGCTGAGGCAGAATTGCTTGAACCCGGGAGGCAGAGGTTGCAGTGAGCC
-AAGATCGTGCCACTGCACTCCAGCCTGGGCGACAGAGCAAGACTTCATCTCAAAAAAAAAAAAAAATTAG
-CTGGGCATGGTGGTGGGCACCTGAAATCCCAGCTACTCGGGAGTCTGAGGCAGGAGAATCGCTTGAACCC
-AGGAGGCAGAAGTTGCACTGAGCTGGGATCACACCATTGCACTCCAGCCTGGGCAACAGAGTGAGACTCC
-ATCTCAAAAAAAGAAAAAGAAAAAGGATAAATACATTCTAACCAAATAATGTTTATCTCATGATTGTAGC
-TGATTCAACATTCAAAAATTGGCCTGGTGCAGTAGCTCAGGCCTGTAATCCCAACATTTTAGGAGGCTGA
-GGCAGGAAGATCTCTTGAGCCCAGGATTTCAAGACCAGCCTGGGCAACATAGTCAGACTGGTCTTTACTG
-GGGGGAAAAAAATCAGTCTGTGTAATTCACCACATTAACAAAGGGAAACATAAAAACCCTATGATCATTT
-CAACAGATGTAGCAAAAGCAGTTAATGATATTCAACACATATGCATGATTACAAACCAACCAACCTCCTA
-GCAAACTAGGGAAAGGAAACTTAACCTAGTTTGATAACAGGGCGTCCACAGTCGGAGTTCCACTAGCAGC
-ATACATAATGGTAGAAAACTCAGTGCTGCCGGGCGCGGTGGCTCACGCCTGTAATGCCAGCACTTTGGGA
-GGCCTAGGCGGGCGGATCACGAGGTCAGGAGATCGAGACTGTCCTGACTAGCATGCTGAAACCCCGTCTC
-TACTAAAAATACAAAAACAAAAAATTAGCCGGGCATGGTGGCGGGCGCCTATAGTCCCAGCTACTCGGGA
-GGCTGAGGCGAGAGAATGGCGTGAACCCGGGAGGCGGAGCTTGCAGAGCCTAGATCGTGCCACTGCACTC
-CAGCCTGGGTGACAGAGTGAGACTTCGTCTCAAAAAAAAAAAAAAAAAAAAAAGAAAAGAAAACTCAACG
-CTTTTTCCTCTAAGATCAGGAACTAGAAAAGGATTTGACTCTCACAACGTTGATACCATACTGGAGGTTT
-TAACCAGGCAAGAAAAAGAAATAATGAGGGCCGGGTGCGGTGGCTCAGGCCTGTAATCCCAGCACTTTGG
-GAAGCCGAGACGGGTGGATCACGAGGTCAGGAGATCGAGACCATCCTGGCTAACACGGTGAAACCCTGTC
-TCTACTAAATATACAAAAAATTAGCCGGGCGTAGTGGCGGGCGCCTGTAGTCCCAGCTACTCGGGAGGCT
-GAGGCAGGAGAATGGCGTGAACTCAGGGGGCGGAGCTTGCAGTGAGCTGAGATCGAGCCACTGCACTCCA
-GCCTGGGCGACAGAGCAAGACTGTGTCTCAAAAAAAAAAAAAGAAAAAGAAATAATGATTAGTGGCCCGA
-TGTCTCACGCCTATAATCCCAGCACTTTGGGAGGCCGAGGTGGGCAGATCACCTGAGGTCTGGAGTTGGA
-GACCAGCCTGACAAAGATGGTGAAACCTCGTCTCTATTAAAATATTAAAAAAATAGCCAGGCGTTGGCCG
-GGTACAGTGGCTCATGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGTGGGTGGATCACCTGAGGTCAGG
-AGTTCAACACCAGCCTGGCCAACATGGTGAAACCCCATCTCTACTAAAAATACAAAAATTAGCCGGGCGT
-AGTGGCGGGCGCCTGTAATCCCAGCTACTTGGGAGGCTTAGGCAGGAGAATCGCTTGAACCTGGGAGGCG
-GAGGTTGTAGTGAGCCGAGATTGCACCATTGCACTCCAGCCTGGGTGACAAAAGCAAAAACTCCGTCTCA
-AAAAAAAAAGAATTAGCCAGGGGTAGTGGTGAACGCCTGTAGTCCCAGCTACTCAGGAGGCAGAGGCAGG
-AGAATCACTTGAACCCAGGAGGCAGAGGTTGCAGTGAGCCGAGATTGTCCCATTGCACTCCAGCCTAGGC
-GACAAGAGCAAAATTCCATGTCAAAAAAAAAAAAAAAAAAGGAAAGAAAAAAAATAACGATTAGAAAGGA
-AGAAATAAAACACATTCACAGCCAGTATGATTCTATACATACATGTCCTAATGGGGCCAGGCGTGGTGGC
-TCATGCCTGTAATCCTAGCACTTTTAGGAGGCTGAGGCAGGTGGCTTCCCTGGGACCAGCCTGGCCAACA
-TGGTGAAACCCCAACTCTAATAAAAATACAAAAAATCAGCCAGGCGTGGTGACGGGCACCTCTAATCCCA
-GCTACTCAGGAGGCTGAGGCAGGAGAATTGCTTGGACCTGGGAGGCAGAGGTTGCAGTGAGCCGAGATCG
-CGCTATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGGCAGGGTGTGGTGGCTTACGCCTGTAATC
-CCAGCACTTCGGGAGGCTGAGGCAGGCCGATCACCTGAGGTCAGGAGTTTGAGACCAACCTAACATGGTG
-AAACCCCGTCTCTACTAAAAATACAAGAATTAGCTGGGTGTAGTGGTGGGCGCCTGTAATCCCAGCTACT
-TGGGAGGCTGAGACAGAAGAATTGCTTGAACCCAGGAGGTGGAGGTTGCAGTGAGCTGAGATCATGCCAT
-TGCACACCACGCCGGGCAACAGAGCGAGATTCCGTCTCAAAAAAAAAAAAAAAGAGTGAAACTCTATCTC
-AAAAAAAAAAAAAAGTCCTAATGGAAAATCCATAAAAAGCTACCAAAACTAATAAATAAATATAGCAGGG
-TTGCAGGTTACAGGGCAATATAGTTATCCCTCTATCTGTAGGGGCTTGGTTCTGGGACTCCTCACACACC
-AAACCCACAGATGTCTAAGTCCCATATATAAGACGGTATAGTATTTGGATTTAACCTACACATATCCTCC
-CATATAGTTTAAATTATCTCTAGATTACTTACATTACCCCCATACAATGAAAATGCTAATGTACATGCAA
-GTATGTATGTAAGTACTTGTACTATATTGTTTAGGGAATCACTGGACATATAGGCCTTCAAGACTGATAC
-CAGCAGCCACTGTTAAGATTCTGGTCAGGCCTGCCCCTGTTTGGGGTCTCAGTTGATCTCATTGCCTTCC
-CACCCAGCCAAGGGCACCTGCATTTCTCTTGGCTCCCTGGCCATTTGGAAGGCCTAGTTCAGCCTGGCAC
-ATTTGTATCCTGGCCCACTGATGCTGGTACCCCTGGGAAGGTCCTGCTCTGAAAAACACGGAGATTTTAG
-TTGCTACTGAAGATTTGAGAGATAAAGACAGGGAGACCTGTCTGTAGACCTGTGTCCCTCCAAGTGGGAT
-TGAGACTTTGGGCCCCCCATTTCAGGACAGCACCTCCTGGCCTGTTGACTGAATAGATCCCTGAAGGAGG
-TGTACTTGCATTAATGGAGTGGGGGTGGGAGCAGTACCACAGATCCGCACTAACAATCACACAGTTCTCT
-CTAGAATAATAATATAGAACAAGTGAAATAGAACAATTGCAGAAAGAGCTAACCTTTGTTGAGCTCTTAC
-TGTGTGCCCAGCACTTTCCTCAACTCTACATTTCCCATAATACACAGAGTACTAGGTAGGCCAGGCTTGG
-TGGCTCACGCCTGTAATCCCAGCACTTTAGGAGGCCAAGGGGGGTGGATCACCTGAGGTCGGGAGTTCAA
-GACCAGCCTGACCAACATGGTGAAACCCCGTCTCTACTAGAAGTACAAAATTAGCCAGGTGTGGTGGCAC
-ATGCTTGTAGTCCTAGCTACTCAGCAGGCTGAGGCAGGAGAATCATTTGAATCCGGGAGGAGGTTGCAGT
-AAGCGGAGATAGTGCCACTGTACTCCAGCCTGGGCAATAAGAGCTGAGACTCCGTCTCAAAATAAAATAA
-AATAAAATAAAATAAAATAAAATAAAATAAAAAAAGAAAAGAGCCTGCCATTAAAGGAGCTGTTTGGTAG
-GGGATGTTTTGTCAGTGCAAACAACAGAAAAGTGGGCTGGGCACAGTGGTTCATGCCTGTAATCCCAGCA
-CTTTGGGAGGCCAAGGCGGGCGGATCACCTGAAGTTGGGAGTTCAAGACCAGCCTGACCAATATGGAGAA
-ACCCCGTCTCTACTAAAAATACAAAATTAGCCGGGCGCAGTGGCGCATGCCTGTAATCCCAGCTACTCGG
-GAGGCTGAGGCAGGAGAATCGCTTGAACCTGGGAGGCAGAGGTTGCGGTGAGCCGAGATCGCACCATTGC
-ACTCCAGCCTGGACGAGAGCAAAACTCTGTCTCAAAAAAAAAAAAAAACAGAAAAGTGTAACAAACACTT
-ACAGTAGGCATGTTTCTTAGCAAATCTGATGACAAATTTGGCATAAAGAAAGAGAGCATCCCTGAAAAAA
-AAAAAAAGAAAAAGAAAGAGAGCATCCTGCCTGGGCAACATAGTGAAACCCTGCCTCTACAAAAAAACTC
-AAAAATTGGCCGGGTGCAGTGGCTCACACCTGTAATCCCAGCACTTTGGGAGTCGGAGGCGGGAGGATCA
-CCTGAGGTCAGGAGTTCGAAACCAGCCTGGCCAACATGGCAAAACCCCATCTCTACTAAAAATACAAAAA
-ATTAATCAGGCGCATTGGTGGGCGCCTGTAATCCCAGCTACTCAGGAAGTTGAGGCAAGAGGATCGCTTG
-AATCTGGGAGGTGGAGGTTACAGTGAGTCGAGATCACACCACTGCACTCTAGCCTGGGTGACAGGGCGAG
-ACTCCGTCTCCAAAAAAAAAAAGAAAAAGAAAAAGACTAAAAAATTAGCCAGGCAGGCCTCTGTGGTCCC
-AGCTACTTGGGAGGCTGAGGCAGGAGAATCACTGAGCCCAGGAGTCCGAGGCTGTAGTGAGCCATGATTG
-CACCACTGTACCCTAGCTTGGGCAACAAAGCAAGACCCTGCCTCAAAAGAAAAAAGAAAGAAAGAAAGAA
-CATGGCGGGCCAGGCACAGTGGCTCACACCTGTAATCCCAGCGCTTTGAGAGGCCGAGGCAGGTGGATCA
-CAAGGTCAGGAGTTCCACACCAGCCTGGCCAACATGGTGAAACCCTGTCTCTACTAAAAATACAAAAAAT
-CAGCCAGGCATGGTGGCAGGGGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATTGCTTGAA
-ACCAGAAGGCAGAGGTTGCAGTGAGCCTAGACTGCACCACTGCACTCCAGCCTGGGCGAAAAGAGCCAAA
-CTCCATCTCAAAAAACAAACAAAAAAACAAAACAAAAGAAAACATGGCAAAGCCTTTGAAAGCTTGTCTG
-GGAGAAGGTGCGATGATAGTTGCATAACTTCGTGCAAGATGCTGGTCCACACAGGGGCTGCCCCTTGCTC
-TTTCTCGCTCTCTTAACCTCTCATATAACAGGCTTGTGTGTTATTCACATTTATTGAGCCCAAGCAGGTG
-CAAGGCATTGTGATCTAATACTTTGGTCAGCAAGACAACAAGATAGATCACTGCCCTGCCCTTAGGAAGT
-GTATATGCTATTAGAGGAAACAGATAAAATAAACAAGGAAAAGTATCAGACAATGTAAGTGCTATGAGAA
-TGCAAATGAGGTGATGTGAATTAAAATAGGATGACTTAAAGTCTGCACGGGAAGGAGCCTACCCCCATGT
-TCCTGGCTAGCCAAGGAACCACCAGTTGATTAGCAGAGAAGGGCAGCCAGTCTAGCTAGAGCTTTTGGGG
-AAGAGGGAGTGGTTGTTAAGAGATGAGATTAAAGAAGCCGAGACGGGCCATTCGTGAGGGGTTTGTAATG
-CAGGGCTGAGGAGTGTCCGAAGAGAATGGGCAGGTGAGCGGTGAGACAGTTGTTCTTCCAGAAGCTTTGC
-AGTGAAAGGAATCAAAGAAATGGAGCCGTGTATCAGGTGGGGAAGGGTGGGGGCCAAGGGGGTGTCCTTC
-CCCATACAGAGATTGCAGGCTGAGAATGACTATATCCTTGTTAACAGGAGGTGGGAGCAGGGCACGGTAG
-CTCACACCTGTAATCTTGGCACTTTAGGAGGCTGAGGCGGGCCGATCACCTGAAGTAAGGAGTTCGAGAC
-CAGCCTGGCCAACATGCAAAGCCCTGTCTCTACTAAAAATACAAAAATTAGCTGGGTGTGGTGGTACTCG
-CCTGTAATCCCAGCTACTCGGGAGACTGAGGCAGGAGAATGGCTTGAACCCGGAAGGTAGAGGTTGCAGT
-GAGCTGAGATCATGCCACTGTGCTCCAGCCTAGGTGACAGAGAGAGACTCCATCTCAAAAAAAAAAAAAA
-AATACAGGAAGGGAGTTGGGAATAGGGTGCACATTTAGGAAGTCTTGGGGATTTAGTGGTGGGAAGGTTG
-GAAGTCCCTCTCTGATTGTCTTTTCCTCAAAGAAGTGCATGGCTGGTGAGGGGTGGGGCAGGAGTGCTTG
-GGTTGTGGTGAAACATTGGAAGAGAGAATGTGAAGCAGCCATTCTTTTCCTGCTCCACAGGAAGCCGAGC
-TGTCTCAGACACTGGCATGGTGTTGGGGGAGGGGGTTCCTTCTCTGCAGGCCCAGGTGACCCAGGGTTGG
-AAGTGTCTCATGCTGGATCCCCACTTTTCCTCTTGCAGCAGCCAGACTGCCTTCCGGGTCACTGCCATGG
-AGGAGCCGCAGTCAGATCCTAGCGTCGAGCCCCCTCTGAGTCAGGAAACATTTTCAGACCTATGGAAACT
-GTGAGTGGATCCATTGGAAGGGCAGGCCCACCACCCCCACCCCAACCCCAGCCCCCTAGCAGAGACCTGT
-GGGAAGCGAAAATTCCATGGGACTGACTTTCTGCTCTTGTCTTTCAGACTTCCTGAAAACAACGTTCTGG
-TAAGGACAAGGGTTGGGCTGGGGACCTGGAGGGCTGGGGACCTGGAGGGCTGGGGGGCTGGGGGGCTGAG
-GACCTGGTCCTCTGACTGCTCTTTTCACCCATCTACAGTCCCCCTTGCCGTCCCAAGCAATGGATGATTT
-GATGCTGTCCCCGGACGATATTGAACAATGGTTCACTGAAGACCCAGGTCCAGATGAAGCTCCCAGAATG
-CCAGAGGCTGCTCCCCCCGTGGCCCCTGCACCAGCAGCTCCTACACCGGCGGCCCCTGCACCAGCCCCCT
-CCTGGCCCCTGTCATCTTCTGTCCCTTCCCAGAAAACCTACCAGGGCAGCTACGGTTTCCGTCTGGGCTT
-CTTGCATTCTGGGACAGCCAAGTCTGTGACTTGCACGGTCAGTTGCCCTGAGGGGCTGGCTTCCATGAGA
-CTTCAATGCCTGGCCGTATCCCCCTGCATTTCTTTTGTTTGGAACTTTGGGATTCCTCTTCACCCTTTGG
-CTTCCTGTCAGTGTTTTTTTATAGTTTACCCACTTAATGTGTGATCTCTGACTCCTGTCCCAAAGTTGAA
-TATTCCCCCCTTGAATTTGGGCTTTTATCCATCCCATCACACCCTCAGCATCTCTCCTGGGGATGCAGAA
-CTTTTCTTTTTCTTCATCCACGTGTATTCCTTGGCTTTTGAAAATAAGCTCCTGACCAGGCTTGGTGGCT
-CACACCTGCAATCCCAGCACTCTCAAAGAGGCCAAGGCAGGCAGATCACCTGAGCCCAGGAGTTCAAGAC
-CAGCCTGGGTAACATGATGAAACCTCGTCTCTACAAAAAAATACAAAAAATTAGCCAGGCATGGTGGTGC
-ACACCTATAGTCCCAGCCACTTAGGAGGCTGAGGTGGGAAGATCACTTGAGGCCAGGAGATGGAGGCTGC
-AGTGAGCTGTGATCACACCACTGTGCTCCAGCCTGAGTGACAGAGCAAGACCCTATCTCAAAAAAAAAAA
-AAAAAAAGAAAAGCTCCTGAGGTGTAGACGCCAACTCTCTCTAGCTCGCTAGTGGGTTGCAGGAGGTGCT
-TACGCATGTTTGTTTCTTTGCTGCCGTCTTCCAGTTGCTTTATCTGTTCACTTGTGCCCTGACTTTCAAC
-TCTGTCTCCTTCCTCTTCCTACAGTACTCCCCTGCCCTCAACAAGATGTTTTGCCAACTGGCCAAGACCT
-GCCCTGTGCAGCTGTGGGTTGATTCCACACCCCCGCCCGGCACCCGCGTCCGCGCCATGGCCATCTACAA
-GCAGTCACAGCACATGACGGAGGTTGTGAGGCGCTGCCCCCACCATGAGCGCTGCTCAGATAGCGATGGT
-GAGCAGCTGGGGCTGGAGAGACGACAGGGCTGGTTGCCCAGGGTCCCCAGGCCTCTGATTCCTCACTGAT
-TGCTCTTAGGTCTGGCCCCTCCTCAGCATCTTATCCGAGTGGAAGGAAATTTGCGTGTGGAGTATTTGGA
-TGACAGAAACACTTTTCGACATAGTGTGGTGGTGCCCTATGAGCCGCCTGAGGTCTGGTTTGCAACTGGG
-GTCTCTGGGAGGAGGGGTTAAGGGTGGTTGTCAGTGGCCCTCCAGGTGAGCAGTAGGGGGGCTTTCTCCT
-GCTGCTTATTTGACCTCCCTATAACCCCATGAGATGTGCAAAGTAAATGGGTTTAACTATTGCACAGTTG
-AAAAAACTGAAGCTTACAGAGGCTAAGGGCCTCCCCTGCTTGGCTGGGCGCAGTGGCTCATGCCTGTAAT
-CCCAGCACTTTGGGAGGCCAAGGCAGGCGGATCACGAGGTTGGGAGATCGAGACCATCCTGGCTAACGGT
-GAAACCCCGTCTCTACTGAAAAATACAAAAAAAAATTAGCCGGGCGTGGTGCTGGGCACCTGTAGTCCCA
-GCTACTCGGGAGGCTGAGGAAGGAGAATGGCGTGAACCTGGGCGGTGGAGCTTGCAGTGAGCTGAGATCA
-CGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGATTCCATCTCAAAAAAAAAAAAAAAAGGCCTCCCCT
-GCTTGCCACAGGTCTCCCCAAGGCGCACTGGCCTCATCTTGGGCCTGTGTTATCTCCTAGGTTGGCTCTG
-ACTGTACCACCATCCACTACAACTACATGTGTAACAGTTCCTGCATGGGCGGCATGAACCGGAGGCCCAT
-CCTCACCATCATCACACTGGAAGACTCCAGGTCAGGAGCCACTTGCCACCCTGCACACTGGCCTGCTGTG
-CCCCAGCCTCTGCTTGCCTCTGACCCCTGGGCCCACCTCTTACCGATTTCTTCCATACTACTACCCATCC
-ACCTCTCATCACATCCCCGGCGGGGAATCTCCTTACTGCTCCCACTCAGTTTTCTTTTCTCTGGCTTTGG
-GACCTCTTAACCTGTGGCTTCTCCTCCACCTACCTGGAGCTGGAGCTTAGGCTCCAGAAAGGACAAGGGT
-GGTTGGGAGTAGATGGAGCCTGGTTTTTTAAATGGGACAGGTAGGACCTGATTTCCTTACTGCCTCTTGC
-TTCTCTTTTCCTATCCTGAGTAGTGGTAATCTACTGGGACGGAACAGCTTTGAGGTGCGTGTTTGTGCCT
-GTCCTGGGAGAGACCGGCGCACAGAGGAAGAGAATCTCCGCAAGAAAGGGGAGCCTCACCACGAGCTGCC
-CCCAGGGAGCACTAAGCGAGGTAAGCAAGCAGGACAAGAAGCGGTGGAGGAGACCAAGGGTGCAGTTATG
-CCTCAGATTCACTTTTATCACCTTTCCTTGCCTCTTTCCTAGCACTGCCCAACAACACCAGCTCCTCTCC
-CCAGCCAAAGAAGAAACCACTGGATGGAGAATATTTCACCCTTCAGGTACTAAGTCTTGGGACCTCTTAT
-CAAGTGGAAAGTTTCCAGTCTAACACTCAAAATGCCGTTTTCTTCTTGACTGTTTTACCTGCAATTGGGG
-CATTTGCCATCAGGGGGCAGTGATGCCTCAAAGACAATGGCTCCTGGTTGTAGCTAACTAACTTCAGAAC
-ACCAACTTATACCATAATATATATTTTAAAGGACCAGACCAGCTTTCAAAAAGAAAATTGTTAAAGAGAG
-CATGAAAATGGTTCTATGACTTTGCCTGATACAGATGCTACTTGACTTACGATGGTGTTACTTCCTGATA
-AACTCGTCGTAAGTTGAAAATATTGTAAGTTGAAAATGGATTTAATACACCTAATCTAAGGAACATCATA
-GCTTAGCCTAGCCTGCTTTTTTTTTTTTTTTTTTTGGAGACAGAGTCTCACTCTGTCACCCAGGCTGGAG
-TGCAGTGGCGGGATCTCGGCTCACTGCAACCTCCGCCTTCTGGGTTCAAGCGATTCTCCTGCCTCAGCCC
-ACTGAGTAGCTGGGATTACAGGCACCTGCCCCGACGCCCAGCTAATTTTTTGTTATTTATTTATTTTTTT
-TTTTAGTAGAGATGAGGTTTCACCATGTTGGCCAGGCTAGTCTCGAACTCCTGACCTTGTGATCTGCCTG
-CCTTGGCCTCCCAAAGTGCTGGGATTACAGGCGTGAGCCACCGCACCCGGCCTGCCTAGCCTACTTTTAT
-TTTATTTTTAATGGAGACAGCATCTTGCTCTGTTGCCCAGGCTGGATTACAGTGATGTGATCATAGCTCA
-TTATACCCTCCTGGGCTCAAGCAATCCCCCTAACTCTGCCTCCCCAGTAGCTAGGACCACAGGCATACAC
-CACCATACCCAGCTAATTTTTAAAATTTTTTGTAGATAGATAGAGTCTCACTATGTTGCCCAGGCTGGTC
-TCTAGCCTACTTTTTTGAGACAAGGTCTTGCTCTGTCACCCAGGCTGGATAGAGTGCAGTAGTGCAGTCA
-CAGCTCACTGCAGCCTCCACCTCCCAGGCTCCATCCATCCTCCCAGCTCAGCCTCCCAAGTTGCTTCAAC
-TACAGGCCTGCACCACCATGCCTGGCTAATTTTTATTTATTTATTTTTATTTTATTTTATTTTATTTTTT
-TGAGACTCAGTCTCACTCTGTCGCCCAGGCTGGAGTGCAGTGGCATGATCTCGGCTCACTGCAACCTCTG
-CCTCCTGGGTTCAAGTGATTCTCCTGCCTCAGCCTCCCGAATAGCTAGGACTACAAGCGCCTGCTACCAC
-GCCCAGCTAATTTTTGTATTTTTAGTAGAGACAGGGTTTCACCATGTTGGCCAGGCTGGTCTCGAACTTC
-TGACCATGTGATCCGCCCGCCTCGGCCTCCCAAAGTGCTGGGATTACAGGTGTGAGCCACCACGCCCGGC
-TAATTTTTATTTATTTATTTAAAGACAGAGTCTCACTCTGTCACTCAGGCTAGAGTGCAGTGGCACCATC
-TCAGCTCACTGCAGCCTTGACCTCCCTGGGCTCCGGTGATTTCACCCTCCCAAGTAGCTAGGACTACAGG
-CACATGCCACGACACCCAGCTAATTTTTTATTTTCTGTGAAGTCAAGGTCTTGCTACGTTGCCCATGCTG
-GTATCAAACCCCTGGGCTCAATCAATCCTTCCACCTCAGCCTCCCCAAGTATTGGGGTTACAGGCATGAG
-CTACCACACTCAGCCCTAGCCTACTTGAAACGTGTTCAGAGCATTTAAGTTACCCTACAGTTGGGCAAAG
-TCATCTAACACAAAGCCCTTTTTATAGTAATAAAATGTTGTATATCTCATGTGATTTATTGAATATTGTT
-ACTGAAAGTGAGAAACAGCATGGTTGCATGAAAGGAGGCACAGTCGAGCCAGGCACAGCCTGGGCGCAGA
-GCGAGACTCAAAAAAAGAAAAGGCCAGGCGCACTGGCTCACGCCTGTAATCCCAGCATTTCGGGAGGCTG
-AGGCGGGTGGATCACCTGAGGTCAGGAGTTCAAGACCAGCCTAGCCAACATGGTGAAACCCCGTCTCTAC
-TAAAATACAAAAATTAACCGGGCGTGATGGCAGGTGCCTGTAATCCCAGCTACTTGGGAGGCTGAGGCAG
-GAGAATCGCTTGAACCAGGAGGCGGAGGTTGCAGGGAGCCAAGATGGCGCCACTGCACTCCAGCCTGGGC
-GATAGAGTGAGACTCCGTCTCAGAAAAAAAAGAAAAGAAACGAGGCACAGTCGCATGCACATGTAGTCCC
-AGTTACTTGAGAGGCTAAGGCAGGAGGATCTCTTGAGCCCAAGAGTTTGAGTCCAGCCTGAACAACATAG
-CAAGACATCATCTCTAAAATTTAAAAAAGGGCCGGGCACAGTGGCTCACACCTGTAATCCCAGCACTTTG
-GGAGGTGGAGGTGGGTAGATCACCTGACGTCAGGAGTTGGAAACCAGCCTGGCTAACATGGTGAAGCCCC
-ATCTCTACTAAAAACACAAAAATTAGCCAGGTGTGGTAGCACACGCCTGTAGTCCCAGCTACTCGGGAGG
-CTGAGGCACAAGAATCACTTGAACCCCAGAGGCGGAGATTGCAATCAGCCAAGATTGCACCATTGCACTC
-CCGCCTGGGCAACAGAGTGAGACCCCATCTCAAAATAAATAAATAAATATTTTTAAAAGTCAGCTGTATA
-GGTACTTGAAGTGCAGTTTCTACTAAATGCATGTTGCTTTTGTACCGTCATAAAGTCAAACAATTGTAAC
-TTGAACCATCTTTTAACTCAGGTACTGTGTATATACTTACTTCTCCCCCTCCTCTGTTGCTGCAGATCCG
-TGGGCGTGAGCGCTTCGAGATGTTCCGAGAGCTGAATGAGGCCTTGGAACTCAAGGATGCCCAGGCTGGG
-AAGGAGCCAGGGGGGAGCAGGGCTCACTCCAGGTGAGTGACCTCAGCCCCTTCCTGGCCCTACTCCCCTG
-CCTTCCTAGGTTGGAAAGCCATAGGATTCCATTCTCATCCTGCCTTCATGGTCAAAGGCAGCTGACCCCA
-TCTCATTGGGTCCCAGCCCTGCACAGACATTTTTTTAGTCTTCCTCCGGTTGAATCCTATAACCACATTC
-TTGCCTCAGTGTATCCACAGAACATCCAAACCCAGGGACGAGTGTGGATACTTCTTTGCCATTCTCCGCA
-ACTCCCAGCCCAGAGCTGGAGGGTCTCAAGGAGGGGCCTAATAATTGTGTAATACTGAATACAGCCAGAG
-TTTCAGGTCATATACTCAGCCCTGCCATGCACCGGCAGGTCCTAGGTGACCCCCGTCAAACTCAGTTTCC
-TTATATATAAAATGGGGTAAGGGGGCCGGGCGCAGTGGCTCACGAATCCCACACTCTGGGAGGCCAAGGC
-GAGTGGATCACCTGAGGTCGGGAGTTTGAGCCCAGCCTGACCAACATGGAGAAACCCCATCTCTACTAAA
-AATACAAAAGTAGCCGGGCGTGGTGATGCATGCCTGTAATCCCAGCTACCTACTCGGGAGGCTGAGGCAG
-GAGAATCGCTTGAACCCGGGAGGCAGAGGTTGCGGTGAGCTGAGATCTCACCATTACACTCCAGCCTGGG
-CAACAAGAGTGAAACTCCGTCTCAAAAAAGATAAATAAAGTAAAATGGGGTAAGGGAAGATTACGAGACT
-AATACACACTAATACTCTGAGGTGCTCAGTAAACATATTTGCATGGGGTGTGGCCACCATCTTGATTTGA
-ATTCCCGTTGTCCCAGCCTTAGGCCCTTCAAAGCATTGGTCAGGGAAAAGGGGCACAGACCCTCTCACTC
-ATGTGATGTCATCTCTCCTCCCTGCTTCTGTCTCCTACAGCCACCTGAAGTCCAAAAAGGGTCAGTCTAC
-CTCCCGCCATAAAAAACTCATGTTCAAGACAGAAGGGCCTGACTCAGACTGACATTCTCCACTTCTTGTT
-CCCCACTGACAGCCTCCCACCCCCATCTCTCCCTCCCCTGCCATTTTGGGTTTTGGGTCTTTGAACCCTT
-GCTTGCAATAGGTGTGCGTCAGAAGCACCCAGGACTTCCATTTGCTTTGTCCCGGGGCTCCACTGAACAA
-GTTGGCCTGCACTGGTGTTTTGTTGTGGGGAGGAGGATGGGGAGTAGGACATACCAGCTTAGATTTTAAG
-GTTTTTACTGTGAGGGATGTTTGGGAGATGTAAGAAATGTTCTTGCAGTTAAGGGTTAGTTTACAATCAG
-CCACATTCTAGGTAGGGGCCCACTTCACCGTACTAACCAGGGAAGCTGTCCCTCACTGTTGAATTTTCTC
-TAACTTCAAGGCCCATATCTGTGAAATGCTGGCATTTGCACCTACCTCACAGAGTGCATTGTGAGGGTTA
-ATGAAATAATGTACATCTGGCCTTGAAACCACCTTTTATTACATGGGGTCTAGAACTTGACCCCCTTGAG
-GGTGCTTGTTCCCTCTCCCTGTTGGTCGGTGGGTTGGTAGTTTCTACAGTTGGGCAGCTGGTTAGGTAGA
-GGGAGTTGTCAAGTCTCTGCTGGCCCAGCCAAACCCTGTCTGACAACCTCTTGGTGAACCTTAGTACCTA
-AAAGGAAATCTCACCCCATCCCACACCCTGGAGGATTTCATCTCTTGTATATGATGATCTGGATCCACCA
-AGACTTGTTTTATGCTCAGGGTCAATTTCTTTTTTCTTTTTTTTTTTTTTTTTTCTTTTTCTTTGAGACT
-GGGTCTCGCTTTGTTGCCCAGGCTGGAGTGGAGTGGCGTGATCTTGGCTTACTGCAGCCTTTGCCTCCCC
-GGCTCGAGCAGTCCTGCCTCAGCCTCCGGAGTAGCTGGGACCACAGGTTCATGCCACCATGGCCAGCCAA
-CTTTTGCATGTTTTGTAGAGATGGGGTCTCACAGTGTTGCCCAGGCTGGTCTCAAACTCCTGGGCTCAGG
-CGATCCACCTGTCTCAGCCTCCCAGAGTGCTGGGATTACAATTGTGAGCCACCACGTCCAGCTGGAAGGG
-TCAACATCTTTTACATTCTGCAAGCACATCTGCATTTTCACCCCACCCTTCCCCTCCTTCTCCCTTTTTA
-TATCCCATTTTTATATCGATCTCTTATTTTACAATAAAACTTTGCTGCCACCTGTGTGTCTGAGGGGTGA
-ACGCCAGTGCAGGCTACTGGGGTCAGCAGGTGCAGGGGTGAGTGAGGAGGTGCTGGGAAGCAGCCACCTG
-AGTCTGCAATGAGTGTGGGCTGGGGGGCCCAGTGCCCGGGTTCCGGGAGGGGAACAAAGGCTGGAGACTG
-GGTCAGTCTGCGGGCTGCATGACAACAAGGGAGGGGGTGGCTCCATTCATAACTCAGGAACCAACCGTCC
-CTCCTCCCCTCCGGCCACGGCTGGCACAAGGTTCTCTCCCTCCCCTGCTTCTAGGACTGGGCTGCTTCCC
-CCTCGGCAGCCTCTCACCAAGGATTACGGGATTTAAATGTCTGATTTAGCAAGGCTGAGCCTCCAGGGTG
-GCCATCTGCTCCATCAGAAAGTGGCAGGATACCTGGGTTCCCAAGGGGAACAGGGGTGGGTGCTACTGGA
-TGGAGAGAGGCCAGTGGGAGGCCTGCTAGCCAGGGTCCCAGGAAAGTGGGGGCAGCTAAGGTAAGAGTAG
-GGGTGTGGGGCTAGGTCCTTCCCAGCATCCCCTCATCCTGGGCCTCATGCCAGGTAGCTGAATGAATTGA
-AGCTTTAAACTCTGCCAGGAAAACCTTTCAAAGGGCTTCTTGGGATAGGGAGGAGAGTCGGGTTGAGGAG
-CTCAGTACTGCCTGCCCATGCTCCTCAGGGCTGCTGGCTCCCAGGGAGGGGGGCTGGGAGCAGGCAGGCT
-CTTCCCCATCACCCACTGCTCTCTTGGAGCCAGTGCTTGAAGGGGCAGTCAGACATGGCTTGCCCTTCCT
-CCTCCCTGGTGGTGGAGATGGGTGTTAGGGTCCAGTGGGTGCTACTGTCCAGGGGGGCTTCTGGGGCCAC
-CAGCCTGTCAGCTCATCAACCAGGCTGAAGGTGCAAGCAGGAGCCCCTTGCCTTGCCCCAAGGATCCCAG
-ACAGCTATGAAGCCACCAGCCTTCCTGACCTCAAGACCACCTTTTTTTTTTCTCTTTCTTACTAGGGAAT
-GCCAAACACTCTCCCCAGGAGATCCAGACCCGCCTCTTTCAGAGACTTTTAACTTAAACATCTGTCCCTA
-CCCAGCAGGCAAACTAGAGCTCCTGAAGCTCAGTCCCTGTCCTTGCCTCTGTAGACAGGTCACCTTGATG
-AGCTTCCTTTTTTTTTTTTTAATTTTTTTTTATTTTAGGCTTTATTGGGGCATAATTGATCCCCCAAAAT
-TGCATACATTCAAGGTATGCAGTGTGATGATTTGATATGGGGGTATATTGTGAAACCATTACCACAATCA
-AATTAATCAGCACGTCCATCATCACACACAGTTACCATTTGTGTGTGTGCACGTGTGTTCACCTACGACG
-AGGACACTTGGACCTACTCTGCAGATCTCAAGTAAACAGAAAATCTCCCTTTTTGACAACCATCCTCCAC
-CCTTTCAATCCCAACCTTTTCCTAGATTATGTCCCTAGCTCTGTTTTTATTTCTGCTGTGCTGCTTCAGA
-TCCATTCTGACTCTGCCAAACCCTTCTTTGTGAGCTGATAGATTGCTGGATTGAGAATTACAGCTGGGCG
-CGGTGGCTCACGCCTGTAATCCCAACACTGTGGGAGGCCAAGGCCGGCGGATCACTTGAGGTCAGGAGTT
-GGAGACCAGCCTGACCAACAAGATGAAACCCCATCTCTACTAAAAATACAAAATTAGCTGGGCATGGTGG
-TGCACGCCTGTAATCTCATCTTCTTGGGAGGCTGAGGCAGGAGAATTGCTTGAACCCGGGAGGTGGAGGT
-TGCAGTGAGCCAAGATCCTGCCATTGCACTCCAGCCTGGGCAACAACAGTGAAGCTCCATCTCAAAACAC
-ACAAAAAAAAGAAGTACAAAGTCTGAGACTTCAGGCCAGCTCTGCTACACTATATACTCTAACCTCTCTG
-GTCCTACTTGGTGACTTCTTTCCCTCTGGTCGTGTTCAAGTTCCCGTCCCATCCAGTCAAGCAGGTACTC
-ATTGGTACCTTACCCTGTGCCAGGAGCTGTTCTAGGCCCTGGAAACCTATGGCAGACATGTTCCCTACCC
-TCCCACTCAAAGAGCCCAGGCCTTATCCTAATGAGATCTGAAATCAAATCTCCCAATTTCCTCATGGCTT
-CAGTCTAAACTTGTAATTCACAACCTTAAATCAATATGTTCTATTTTTTTATTTAGAAAACATTTCCGGC
-CAGGCACGGTGGATCACACCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCA
-GGAGGCAGAGGGTTGCAGTGAGCCGAGATTGCGCCATTGCACTCTAGCCTGGGCAACAGAGCAAGACTCC
-ATCTCAAAAAAGAAAAAAAAATGGAAGAAAAAAAAATTTCCCCCTCATTTTAGGAACACGAGGTCTCCAA
-ATCTAAAATTCGTACTCTGAGGAGATTGAATAGCCTTAAATGCTTTCATCATTAAAAAGAAAAGAAAGGA
-ACCTGGTATGCATCCTAAAAATGAAAAATATACCTACCTGTAATCCCAGCACACAGCACATTGGGAGGCT
-AAAGCAGGAGGATAACTTGAGGCCAGGAGTTTCAGATCAGCCTGGGCAACATAGCAACACCCCATTTCTT
-TTTCTTTTCTTTTTTTTTTGGAGACACAGTCTCGCTCTGTTACTCAGGCTGGAGTGCAGTGGCTCAATCT
-CAGCTCACTGCAAGCTCTGCCTCCCAGGTTCATGCCATTCTCCTGCCTCAGCCTCCCGAGTAGCTGGGAC
-TACAGGCGCCCGCCACCACGCCTGGCTAATTTTTTGTATTTTTAGTAGAGACAGGGTTTCACCGTGTTAG
-CCAGGATGGTCTCGATCTCCTGACCTCGTGATCCGCCAGCCTTGGCCTCCTAAAGTACTGGGATTACAGG
-CGTGAGCCACTGCGCCTGGCCACAACACCCCATTTCTATTTTAATAAAATAAAATACTGTGAAAAACATT
-TACAATTTTTAAATTTTAATTTTAAAATTAAACTTATATTTATTCATTTGTGTGTGTGGGTTTTTTTTTT
-TTTTTTTTTTTGCTTTTTTTTTGAGATGGAGTGTCACTCTGTCACCCAGGCTGGAGTGCAGTGGCGTGAT
-CTCTGCCTCCCGGTTCAAGTGATTCTCCTGCCATAGCCTCCCAAGTAGCTGGGACTACAGGTACACGCCA
-CCACGCCGGGTTAATTTTTGTATTTTTAGTAGAGACAGGATTTCACTGTGTCGCCAGGCTAGCCTCGAAC
-TCCTGACCTCAGGTGATTCGCCCACCTTGGCCTCCCAAAGTGCTGTGATTACAAGCGTGAGCCACCGTGC
-CCAGCCCAAAGTTGGTTTTAATAGCAGAAAATCTATCAACATAATTCAATATATTAAATTTAGAAAGAAA
-AATTATCTATCATATCAACAGATACTGAAAGGAATTTGATTAAATTTCAGTAGCCATTTCCTTAAAAAAG
-AAAACACTTTAACACAGTAATAGACTGATAATGGAATACCAATTTTCCTAATAAGTTAAACATTAAGATA
-ATTTCAATTAAGGTCAAGAGCTGGGCCAGGTGCAGTGGCTCACACCTGTAATCCCAACACTTTGGAGGCC
-AAGGTGGGTGGATCACCTGAGGTCAGGAGTGGAGACCAGCCTGGCTGACAATAGTGAAATCCTGCCTCTA
-CTAAAAACACAAAAAATTAGCTGGGCATGGTGGTGGGCACCTATAATCCCAGCTACTGGGAAGGCTGAGA
-CAGGAGAATTGCTTGAACCTGGGAGGCGGAGGTTGCAGTGAGCAAAGATCACACCATTGCACTCCAGCCT
-GGGCGACAGAGCCAGAGTCAGTCTCAAAAAAAAAAAGAGGTGGCCACACCTATAATCCAAACATTTTGTG
-AGGCCAAGGCAGGAGAATTGCTTCAGGCCAAGAGTTGAACACCTCGTCAACATAGCCAGACCTCTCTCTA
-GATAGATAGATAGATGATAGATAGAGAGATAGATAGATGATAGATAGAGAGATAGATAGATGATAGATAG
-ATAGATAGATAGATAGATAGATAGATAGATAGATAGATAGATAGATAGATAATCTGGCCGGGTGTGGAGG
-CTCACGCCTGTAATCCCAGCACTTTGGGAGGCTGAGGCGGGCAGATCACGAGGACAAGAGATTGAAACCA
-TCCTGGCTAACAAGGTGAAACCCCGTCTCTACTAAAAATACAAAAAATTAGGCGGGTGTGGTGGCACGCG
-CCTGTAGTCCTAGCTATTCAGGAGGCTGAGACAGGAGAATTGCTTGAATCCGAAAGGCGGAGGTTGCAGC
-GAGCCGAGATCGTGCCACTGCACTCCAGCCTGGGTGACAGAGCAAGACTCCATCTCAAAATAAATAAATA
-AATAATCAAGAACAGTATAAGGGGCTGTATGGTGGCTCATGCCTGTGATCCCAGCACTTTGGGAGGCCAA
-GGTGGGAGGATCCCTTGAGACCAGCCCAGGCAACAGAGAAAGACCCTGTCTCTATTTAAAAAAATTAAAA
-ACTGGCCGGGCACGGTGGCTCACGCCTGTAATTCCAGCGCTTGGGAGGCCAAGGCAGGCACATCAGGAGG
-TCAGGAGTTCGAGACCAGCCTGGCCAACGTGGTGAAACCCCGTCTCTACTAAAAATACAAAAAGTAGCTA
-GGCGTGGTGGCAGGCACCTGTAATCCCAGCTACTTGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCAGG
-AGGCGGAGGTTGCAGTGGGCAAAGATCGTGCCATTGCACTCAGCCTGGGTGACAGGGCAAGACTCCATCT
-CAAAATAAATAAACAAAGTAATTAATTAATTAAATTAAAAACTGTGGGGATATAGACTTACTCTGGTTTT
-ATTTTTTCTTTTCTTTTCTTTTCTTTTTTCTGAGACGGAGTCTCGCTCTGTTGCCCAGGCTGGAGTACAG
-TGGCGTGGTTTCTGTTCTCTGCAACCTCCACCTCCCGGATTCAAGCGATTCTCTTGCCTCAGCCTCTTGA
-ATACCTGGAATTACAGGTGCCTGCCACCACCCCCGGCTAATTTTTTGTATTTTTAGTAGAGACAGGGTTT
-CACCATGTTGGCCAAGCTGGTCTCGAACTCCTGACCTCATGATCCACCCGCCTCTGCCTCCCAAAGCACT
-GAGACTACAGGAGTGAGCCACTGTGCCCAGCCTACTCTGGTTTTAGTGCATTCAAGAGGAACAAAAAAGG
-AAGAAAATCACTAGTAAATATACCTCTTTCTGGTTAGAGTGGATGTTTGGAAATTATATATATATTATAT
-TATATTATATATATTATATATATACACAAACACGTACATACATGCACACACATATATGCCTTTTTGATTA
-TAGGATAGTATACCAAAACTCAGAAATATTATGGAATTAACAGAATTTAGTAAGGCAGATAAGTAGTAGG
-TAGAAAAATATTAATTTTATCTTCCAGCAGAAGCACTGTGAAAAATTAGACAACAAGAAAACATTCCATT
-CAAAATAATGACAATAAGGCCGGGCATGGTGGCTCACACCTGTAATCCCAGCACTTTGGGAGGCTGAGGC
-AGGAGGATCATCTGAGGTCAAGTTTGAGATCAGCCTGGCCAACATGGTGACACCCTGTCTCTACTGAAAA
-TACAAAAATCAGCCAGCTATGGTAGTGTAAGCCTGTAATTCCAGCTACTCGGGAGGTCGAAGCAGAAGAA
-TCACTTGAACCCAGGAGGCAGAGATTGCAGTGAGCCAAGATCCTGCCAGTGCTTTCCAGCCTGGGCAACA
-GTGTGAGGCTCCATCTCAAAAAAAAAAAAAAAAAAAAGACAATAGCAATAAACATTAAGAAATGTGTAAT
-AGGAATGGCACACACAAAGAAGGAATGGCACAGAGCCTGTATGCAGAAGACCACAAACCCTTATTTAACG
-ACGTAAGCCAAGATCCAAAGAAAATGATAGATTCTCAGATGGGAAAACTAAAAAAATAAGAAAAATCAAT
-TATCTCGAGATAAATATAATATAATGCAATTTCAATTAGAATCCCAAATTTTCATTGTGTGTGTGTGTGA
-GTTGGGTAAATTTATCATAAATGTATAGGAACGAGTAAGTGTCACTAGTTGTTTAAATAAATACTGGATT
-TGGGCCAGGCATGGTGGCTCACGCCTCTAATCCCAGCACTTTGGGAGACCGAGGCGGGCAGATCATGAGG
-TCAGGAGATCGAGACCATCTGGCCAACATAGTGAAAACTCGTCTCTACTAAAGATACAAAAAATTAGCTG
-GGCATGGTGGCACGTGCCTGTAGTTCCAGCTACTCTGGAGGCTGAGGCAGGAGAGTTGCTTGAACCCGGG
-AGGTGGAGGTTGCAATGAGCCGAGATCCTGTCACTGCACTCCACCCTGGCGACAAAGTGAGACTCCGTCT
-CTCTCTCTCTCTTTAGGCCAAGGCAGGTGGATCACCTGAGGTCAGGAGTTCAAGACAGCCTGGCCAACAT
-AGCGAAATCCCATCTCTACTAAAAATACAAAAATTAGCCTGGCAGTGGTGGCCCACGCCTGTAATCCCAG
-CTACTAAGGGGGCTGAGGCAGGAGGATCTCTTAACCAGGGAGGAGGAGGTTGCAGTGAGCAGAGATTGTG
-CCACTGCACTCCAGCCTGTGCAACAGAGTGAGACTCTGTCTCAAAAAAAATAAATAAACAAAATACTGGA
-GGCCGGGCACGGTGGCTCCCGCCTGTAATCCCAGCACTTTGGGAGGCCAAGGCGGGTGAATCGCTTTCAG
-CTCAGGAGTTCCGGACCAGTCTGGGCAACATGGCAAAACCCCGTCTATACTAAAAATACAAAACTTAGCC
-AGGCGTGGTAGTGCATACCTATAATCCCAGCTACTCGAGAGGCTGAGGCAGGAGAATCCCTTGAAACCGG
-GAGGCAGAGGTTGCAGTAAGCTGAAATCGTGCCACTGCACTCCAGCCTGGACGACACAGCGGGAGACTGT
-CTCAATAAATAAAATAAATAATATAAAATAACATAAATAATAAAATTGTAAATAATAAGTAAATAATAAG
-CAACAGAATGGAGAGGGGGTCCTATTTGCCTTGCCAGATTTTAGAGAACTTAGTATAGGCTAGGCAGGTG
-CAGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGTCCAAGGCAGTGGATCACATGAGGTCAGGAGTTC
-AAGACCAGCCTGACCAACATGGTGAAACCCCATCTCTACTAAAAATACAAAATTAGCCAGGCATGGTGGC
-ACATGCCTGTAATCCCAGCTACTTGGGAGGCTGAGGCAGGAGAATCACTTGAACTCGAGAGGTGGAAGCT
-GCAGCGAGCTGAGATCACGCTACTGTACTCCAGCCTGGGCAACAAGAGTGAGACTCCATCAAAAAAAAAA
-AAAAAGAAACGAGAAAAAAAAAAAGAAAACTTACTATATAACTGCTGGAATGAGGTGGATGTGACATATG
-GAGTGGTAGACAAACCAAGGAAAGCAAGTAACAAATACAGGAGATGTTCTCATACAGGAGAATTATTACA
-TGGCCAAAATTAGCATTTCAATTTAATTGGAACACATTAGATATATTTGTTCTTTTGTTCTTTTTGTTAT
-CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGAGACAGAGTTTCGCTCTCATTGCCCAGGCTGGAGTGTAA
-TGGTGTGATCTTGACTCACCGCAACCTCCGCTTCCTACGTTGAAGTGATTCTCCTGCCTCAGCCTCCCGA
-GTAGCCGGGATTACAGGCATACGCCACCACACCTGGCTAATTTTTTTTGCATTTTCAGTAGAGACAGGGT
-TTCTCCATGTTGATCAGGCTGGTTTCGAACTCCTGAGCTTAGGTGATCCGCCCACCTCAGCCTCCCAAAG
-TGCTGGGATTACAGGCGTGAGCCACTGTGCCCGGCCCCTATCTCTTTTTTTGTTTGTTTGTTTTCTGAGA
-TGGAATCTGGCTCTCTCACCCAGGCTAGAGTGCAATGGCACGATGTTGGCTCACTGCAACATCCACGTCC
-CGGGTTCAAGCGATTCTTCTGCCTCAGCCTCCCAAGTAGCTGGGATTACAGGTGCCTGTCGCCACATCCA
-GCTAATTTTTTGTATTTTTAGTAGAGACAGGGTTTCACCGTGTTCCCCAGGCTGGTCTCAAACTCCTGAG
-CTCCGGCAATCCACCCGCCTCGGCTTCCCAAAGCGCTAGGATTACAGGCGTGAGCCACCGCACCTGGCCC
-CTATCTCTTAAAAATATATTTTTTTGCCCAACACACATTTCCAAGTTGCCTTGGGGGAAAAAAAATAAAT
-GAAGCTGGCACAACTGAAAAAATAAAACTGGGGCCTTGGCCAGGCACAGTGGCTCAGGCCTATAATCCCA
-GCACTTTGGGAAGCTGAGGTGGGAGGATCACTTGAGGTCAGGAGTTCGAGACCAGTCTGGCTAACACGGT
-GAAAACCCTTCTCTACTAAAAATACAAAAGTCAGCCAGGCGTAGTGGTGTGCACCTGTAATCCCAGCTAC
-TCAGGTAGCTGAGGCATGAGAATCACATGAACCTGGAAAGTGGAGGTTGCAGTGAGCCGAGATTGCACCA
-CTGCACTCCAGCCTGGGTAAGGAAATGAGACTCTGTCTCCAAAAAAAAAAAAAAGATACTACAAAGTCAA
-GAGACAAACAAT</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_link</span>(<span class="at">dbfrom=</span><span class="st">"gene"</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">id=</span>search_tp53_hs<span class="sc">$</span>ids, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">db=</span><span class="st">"nuccore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(fetch_tp53_hs, <span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fetch_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_fetch</span>(<span class="at">db=</span><span class="st">"nuccore"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">id=</span>link_tp53_hs<span class="sc">$</span>links<span class="sc">$</span>gene_nuccore_refseqgene, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rettype =</span> <span class="st">"fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(fetch_tp53_hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(fetch_tp53_hs, <span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="manipulating-sequences" class="level2">
 <h2 class="anchored" data-anchor-id="manipulating-sequences">Manipulating sequences</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fasta <span class="ot">&lt;-</span> <span class="fu">readDNAStringSet</span>(<span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fasta <span class="ot">&lt;-</span> <span class="fu">readDNAStringSet</span>(<span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dna_tp53_human <span class="ot">&lt;-</span> fasta[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dna_tp53_human <span class="ot">&lt;-</span> fasta[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   A    C    G    T    M    R    W    S    Y    K    V    H    D    B    N    - 
 8647 7986 8058 8081    0    0    0    0    0    0    0    0    0    0    0    0 
@@ -852,29 +373,29 @@ GAGACAAACAAT</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human, <span class="at">baseOnly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human, <span class="at">baseOnly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    A     C     G     T other 
  8647  7986  8058  8081     0 </code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>gc_content <span class="ot">&lt;-</span> <span class="fu">letterFrequency</span>(dna_tp53_human, </span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">letters =</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"C"</span>), </span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">as.prob=</span><span class="cn">TRUE</span>)</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(gc_content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>gc_content <span class="ot">&lt;-</span> <span class="fu">letterFrequency</span>(dna_tp53_human, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">letters =</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"C"</span>), </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">as.prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(gc_content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4895643</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>tp53_comp <span class="ot">&lt;-</span> <span class="fu">complement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tp53_comp <span class="ot">&lt;-</span> <span class="fu">complement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>tp53_rev <span class="ot">&lt;-</span> <span class="fu">reverse</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tp53_rev <span class="ot">&lt;-</span> <span class="fu">reverse</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>tp53_rev_comp <span class="ot">&lt;-</span> <span class="fu">reverseComplement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tp53_rev_comp <span class="ot">&lt;-</span> <span class="fu">reverseComplement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
