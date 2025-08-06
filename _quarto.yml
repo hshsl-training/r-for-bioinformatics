@@ -21,6 +21,8 @@ website:
         file: index.qmd
       - text: "Introduction"
         file: 01-GettingSetUp.qmd
+      - text: "Finding Sequences"
+        file: 02-rentrez.qmd
      # - sidebar:sidebar id - repeat as needed for sidebar entries
     
 
