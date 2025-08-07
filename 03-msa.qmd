@@ -23,6 +23,12 @@ library(rentrez)
 library(tidyverse)
 ```
 
+## Learning Objectives
+
+- Become familiar with specialized R data structures
+- Be able to interpret NCBI accession numbers
+- Use R to align sequences
+- Use R to draw phylogenetic trees
 
 
 In this section, we will work through an entire workflow for finding protein sequences, aligning them, and using that alignment to create a phylogenetic tree. 
@@ -224,7 +230,7 @@ names(orthologs) <- names(orthologs) %>%
                   replacement = "") #remove brackets
 ```
 
-Let's do a pairwise alignment of the first two sequences in our orthologs object using the **`pwalign`** package.
+Let's do a pairwise alignment of the first two sequences in our orthologs object using the **`pwalign`** package. We use a pairwise alignment to look for regions of similarity in our protein sequences.
 
 ```{r}
 align_hs_mm <- 
@@ -239,7 +245,7 @@ pwalign::pid(align_hs_mm)
 
 ## Multiple Sequence Alignment
 
-To align all of our sequences, we'll use the **`DECIPHER`** package.
+To align all of our sequences, we'll use the **`DECIPHER`** package to perform a multiple sequence alignment (MSA). There are several packages that can perform MSA (including the **`msa`** package). If we look at the documentation for the `DECIPHER` package `AlignSeqs` requires a `XStringSet` object. When we created our `orthologs` object with `Biostings` it created an `AAStringSet`, so we can easily use `Biostrings` and `DECIPHER` together for our analysis. This is how we start to build a bioinformatics workflow in R.
 
 ```{r}
 #| output: false
@@ -255,7 +261,7 @@ BrowseSeqs(msa)
 
 ## Building a Phylogenetic Tree
 
-Now that we have our alignment, we need to calculate a distance matrix. This will be used to construct our tree.
+Now that we have our alignment, we need to calculate a distance matrix. This will be used to construct our tree. `DistanceMatrix()` is another package from `DECIPHER` that requires an `XStringSet` object.
 
 ```{r}
 dist <- DistanceMatrix(msa)
@@ -275,8 +281,9 @@ plot.phylo(tree)
 ```
 
 There are several ways you can customize your plot. Here are some examples:
-| Argument          | Description                                                                  | Example                               |
-| ----------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
+
+| Argument          | Description  | Example                               |
+| ----------------- | -------------| ------------------------------------- |
 | `type`            | Tree layout: `"phylogram"`, `"cladogram"`, `"fan"`, `"unrooted"`, `"radial"` | `plot(tree, type = "fan")`            |
 | `direction`       | Direction: `"rightwards"`, `"leftwards"`, `"upwards"`, `"downwards"`         | `plot(tree, direction = "downwards")` |
 | `use.edge.length` | Use branch lengths (`TRUE`) or equal lengths (`FALSE`)                       | `plot(tree, use.edge.length = FALSE)` |
@@ -303,3 +310,8 @@ title(main = "TP53 Protein-Based Phylogeny of Selected Vertebrate Species")
 ```
 
 
+::: {.callout-tip title="CHALLENGE"}
+
+Try customizing your tree in various ways. Use the Help pane to look at documentation for `plot.phylo()` if necessary
+
+:::

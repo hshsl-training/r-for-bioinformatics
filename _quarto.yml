@@ -23,7 +23,7 @@ website:
         file: 01-GettingSetUp.qmd
       - text: "Finding and Manipulating Sequences"
         file: 02-rentrez.qmd
-      - text: "Multiple Sequence Alignment and Phylogenetics"
+      - text: "Building a Bioinformatics Workflow"
         file: 03-msa.qmd
      # - sidebar:sidebar id - repeat as needed for sidebar entries
     

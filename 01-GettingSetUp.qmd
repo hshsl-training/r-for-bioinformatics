@@ -96,6 +96,7 @@ BiocManager::install(c("Biostrings", "pwalign", "DECIPHER"))
 **NOTE: You only need to install a package once on your system (and after updates)**, but you will want to load the packages into your R session with the `library()` function.
 
 ```{r}
+
 #| eval: false
 
 library(ape)

@@ -27,7 +27,7 @@ After this session, participants will be able to:
 
 
 ## Acknowledgements
-Many thanks to Jean-Paul Courneya for thoughtful feedback and testing that helped shaped this lesson
+Many thanks to Jean-Paul Courneya for thoughtful feedback and testing that helped shaped this lesson.
 
 ## License
 This work is licensed under a [Creative Commons Attribution 4.0 International License (CC BY)](https://creativecommons.org/licenses/by-sa/4.0/)
