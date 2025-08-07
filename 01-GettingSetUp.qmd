@@ -12,8 +12,6 @@ editor_options:
 knitr::opts_chunk$set(fig.width=6, fig.height=3.5, fig.align="center")
 ```
 
-**Note: This lesson assumes some basic familiarity with R, RStudio, and
-the **`tidyverse`**.**
 
 ## Learning Objectives
 
@@ -77,8 +75,7 @@ CRAN, we'll be installing
 
 ```{r} 
 #| eval: false
-#| warning: false
-#| message: false
+
 install.packages(c("tidyverse", "rentrez", "ape"))
 ```
 
@@ -92,16 +89,14 @@ Then we can install our Bioconductor packages with `Biocmanager`
 
 ```{r}
 #| eval: false
-#| warning: false
-#| message: false
+
 BiocManager::install(c("Biostrings", "pwalign", "DECIPHER"))
 ```
 
 **NOTE: You only need to install a package once on your system (and after updates)**, but you will want to load the packages into your R session with the `library()` function.
 
 ```{r}
-#|warning: false
-#|message: false
+#| eval: false
 
 library(ape)
 library(Biostrings)

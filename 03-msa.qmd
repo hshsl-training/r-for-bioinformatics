@@ -1,5 +1,5 @@
 ---
-title: "Multiple Sequence Alignment and Phylogenetic Analyses"
+title: "Building a Bioinformatics Workflow"
 editor: source
 format: html
 toc: true
@@ -23,8 +23,6 @@ library(rentrez)
 library(tidyverse)
 ```
 
-
-## Learning Objectives
 
 
 In this section, we will work through an entire workflow for finding protein sequences, aligning them, and using that alignment to create a phylogenetic tree. 
@@ -270,11 +268,38 @@ tree <- nj(dist)
 ```
 
 
-Finally, we can plot our tree.
+Finally, we can plot our tree, using a variation of base R`plot()`. `plot.phylo()` requires an object of class `phylo`, which we created
 
 ```{r}
-plot(tree)
+plot.phylo(tree)
 ```
 
+There are several ways you can customize your plot. Here are some examples:
+| Argument          | Description                                                                  | Example                               |
+| ----------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
+| `type`            | Tree layout: `"phylogram"`, `"cladogram"`, `"fan"`, `"unrooted"`, `"radial"` | `plot(tree, type = "fan")`            |
+| `direction`       | Direction: `"rightwards"`, `"leftwards"`, `"upwards"`, `"downwards"`         | `plot(tree, direction = "downwards")` |
+| `use.edge.length` | Use branch lengths (`TRUE`) or equal lengths (`FALSE`)                       | `plot(tree, use.edge.length = FALSE)` |
+| `show.tip.label` | Show/hide tip labels          | `plot(tree, show.tip.label=FALSE)` |
+| `cex`            | Font/label size               | `plot(tree, cex=0.8)`              |
+| `label.offset`   | Space between labels and tree | `plot(tree, label.offset=0.01)`    |
+| `no.margin`      | Remove plot margins           | `plot(tree, no.margin=TRUE)`       |
+| `edge.width`     | Line thickness                | `plot(tree, edge.width=2)`         |
+| `edge.color`     | Color of edges                | `plot(tree, edge.color="blue")`    |
+
+
+We can also use the `title()` function to add a title.
+
+```{r}
+plot.phylo(tree, 
+           label.offset = 0.2,
+           direction = "left",
+           edge.width = 2,
+           edge.color = "steelblue",
+           font = 1,
+           use.edge.length = FALSE)
+title(main = "TP53 Protein-Based Phylogeny of Selected Vertebrate Species")
+
+```
 
 

@@ -25,9 +25,10 @@ library(tidyverse)
 
 
 ## Learning Objectives
-- Practice putting together a bioinformatics workflow
-- Understand how to programmatically access NCBI databases
-- 
+- Be able to name some main NCBI databases and their purposes
+- Become familiar with the `rentrez` core functions and how they are related.
+- Understand how to programmatically access NCBI data.
+- Use R to analyze and manipulate a biological sequence
 
 
 ## NCBI data and the **`rentrez`** package 
@@ -177,8 +178,24 @@ We can also save this to a file
 writeLines(fetch_tp53_hs, "data/tp53_human.fasta")
 ```
 
-### Try it Yourself
+### Try it Yourself!
 
+::: {.callout-tip title="CHALLENGE"}
+
+1. Look up which fields are searchable in the `Protein` database.
+1. Search `Gene` for the BRCA1 gene in humans. What id is returned?
+1. Use `entrez_link()` to find **all** databases that have a link to this Gene record. How many databases are linked? How many related records are there in Pubmed? 
+
+:::: {.callout-tip title="Solution" icon=false collapse="true"}
+1. `entrez_db_searchable("protein")`
+1. `brca1_search <- entrez_search(db = "gene", term = "BRCA1[gene] AND human[orgn]")` <br>
+  `brca1_search$ids`
+1. `brca1_link <- entrez_link(dbfrom = "gene", id = test_search$ids, db = "all")`<br>
+  `brca1_link$links`<br>
+  `brca1_links$links$gene_pubmed`
+::::
+
+:::
 
 ## Manipulating sequences with **`Biostrings`**
 
