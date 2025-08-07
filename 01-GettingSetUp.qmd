@@ -57,6 +57,8 @@ to the Bioconductor repository.
 
 ```{r}
 #| eval: false
+#| warning: false
+#| message: false
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -75,6 +77,8 @@ CRAN, we'll be installing
 
 ```{r} 
 #| eval: false
+#| warning: false
+#| message: false
 install.packages(c("tidyverse", "rentrez", "ape"))
 ```
 
@@ -88,6 +92,8 @@ Then we can install our Bioconductor packages with `Biocmanager`
 
 ```{r}
 #| eval: false
+#| warning: false
+#| message: false
 BiocManager::install(c("Biostrings", "pwalign", "DECIPHER"))
 ```
 
