@@ -138,7 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./03-msa.html" aria-current="page"> 
-<span class="menu-text">Multiple Sequence Alignment and Phylogenetics</span></a>
+<span class="menu-text">Building a Bioinformatics Workflow</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -156,7 +156,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-protein-sequences-with-rentrez" id="toc-getting-protein-sequences-with-rentrez" class="nav-link active" data-scroll-target="#getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#getting-protein-sequences-with-rentrez" id="toc-getting-protein-sequences-with-rentrez" class="nav-link" data-scroll-target="#getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></a></li>
   <li><a href="#pairwise-alignment" id="toc-pairwise-alignment" class="nav-link" data-scroll-target="#pairwise-alignment">Pairwise Alignment</a></li>
   <li><a href="#multiple-sequence-alignment" id="toc-multiple-sequence-alignment" class="nav-link" data-scroll-target="#multiple-sequence-alignment">Multiple Sequence Alignment</a></li>
   <li><a href="#building-a-phylogenetic-tree" id="toc-building-a-phylogenetic-tree" class="nav-link" data-scroll-target="#building-a-phylogenetic-tree">Building a Phylogenetic Tree</a></li>
@@ -185,7 +186,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<ul>
+<li>Become familiar with specialized R data structures</li>
+<li>Be able to interpret NCBI accession numbers</li>
+<li>Use R to align sequences</li>
+<li>Use R to draw phylogenetic trees</li>
+</ul>
 <p>In this section, we will work through an entire workflow for finding protein sequences, aligning them, and using that alignment to create a phylogenetic tree.</p>
+</section>
 <section id="getting-protein-sequences-with-rentrez" class="level2">
 <h2 class="anchored" data-anchor-id="getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></h2>
 <p>We previously looked for the nucleotide sequence for the human TP53 gene. Our goal in this lesson will be to find <strong>orthologs</strong> of that gene. An ortholog is a gene in different species that evolved from a common ancestral gene through speciation and typically retains the same function.</p>
@@ -578,7 +588,7 @@ Regex metacharacters
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(<span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">[|</span><span class="sc">\\</span><span class="st">]"</span>, </span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">replacement =</span> <span class="st">""</span>) <span class="co">#remove brackets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let’s do a pairwise alignment of the first two sequences in our orthologs object using the <strong><code>pwalign</code></strong> package.</p>
+<p>Let’s do a pairwise alignment of the first two sequences in our orthologs object using the <strong><code>pwalign</code></strong> package. We use a pairwise alignment to look for regions of similarity in our protein sequences.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>align_hs_mm <span class="ot">&lt;-</span> </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  pwalign<span class="sc">::</span><span class="fu">pairwiseAlignment</span>(orthologs[<span class="dv">1</span>], orthologs[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -593,7 +603,7 @@ Regex metacharacters
 </section>
 <section id="multiple-sequence-alignment" class="level2">
 <h2 class="anchored" data-anchor-id="multiple-sequence-alignment">Multiple Sequence Alignment</h2>
-<p>To align all of our sequences, we’ll use the <strong><code>DECIPHER</code></strong> package.</p>
+<p>To align all of our sequences, we’ll use the <strong><code>DECIPHER</code></strong> package to perform a multiple sequence alignment (MSA). There are several packages that can perform MSA (including the <strong><code>msa</code></strong> package). If we look at the documentation for the <code>DECIPHER</code> package <code>AlignSeqs</code> requires a <code>XStringSet</code> object. When we created our <code>orthologs</code> object with <code>Biostings</code> it created an <code>AAStringSet</code>, so we can easily use <code>Biostrings</code> and <code>DECIPHER</code> together for our analysis. This is how we start to build a bioinformatics workflow in R.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>msa <span class="ot">&lt;-</span> <span class="fu">AlignSeqs</span>(orthologs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -604,7 +614,7 @@ Regex metacharacters
 </section>
 <section id="building-a-phylogenetic-tree" class="level2">
 <h2 class="anchored" data-anchor-id="building-a-phylogenetic-tree">Building a Phylogenetic Tree</h2>
-<p>Now that we have our alignment, we need to calculate a distance matrix. This will be used to construct our tree.</p>
+<p>Now that we have our alignment, we need to calculate a distance matrix. This will be used to construct our tree. <code>DistanceMatrix()</code> is another package from <code>DECIPHER</code> that requires an <code>XStringSet</code> object.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">DistanceMatrix</span>(msa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -628,7 +638,68 @@ Time difference of 0 secs</code></pre>
 </div>
 </div>
 </div>
-<p>There are several ways you can customize your plot. Here are some examples: | Argument | Description | Example | | —————– | —————————————————————————- | ————————————- | | <code>type</code> | Tree layout: <code>"phylogram"</code>, <code>"cladogram"</code>, <code>"fan"</code>, <code>"unrooted"</code>, <code>"radial"</code> | <code>plot(tree, type = "fan")</code> | | <code>direction</code> | Direction: <code>"rightwards"</code>, <code>"leftwards"</code>, <code>"upwards"</code>, <code>"downwards"</code> | <code>plot(tree, direction = "downwards")</code> | | <code>use.edge.length</code> | Use branch lengths (<code>TRUE</code>) or equal lengths (<code>FALSE</code>) | <code>plot(tree, use.edge.length = FALSE)</code> | | <code>show.tip.label</code> | Show/hide tip labels | <code>plot(tree, show.tip.label=FALSE)</code> | | <code>cex</code> | Font/label size | <code>plot(tree, cex=0.8)</code> | | <code>label.offset</code> | Space between labels and tree | <code>plot(tree, label.offset=0.01)</code> | | <code>no.margin</code> | Remove plot margins | <code>plot(tree, no.margin=TRUE)</code> | | <code>edge.width</code> | Line thickness | <code>plot(tree, edge.width=2)</code> | | <code>edge.color</code> | Color of edges | <code>plot(tree, edge.color="blue")</code> |</p>
+<p>There are several ways you can customize your plot. Here are some examples:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 19%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>type</code></td>
+<td>Tree layout: <code>"phylogram"</code>, <code>"cladogram"</code>, <code>"fan"</code>, <code>"unrooted"</code>, <code>"radial"</code></td>
+<td><code>plot(tree, type = "fan")</code></td>
+</tr>
+<tr class="even">
+<td><code>direction</code></td>
+<td>Direction: <code>"rightwards"</code>, <code>"leftwards"</code>, <code>"upwards"</code>, <code>"downwards"</code></td>
+<td><code>plot(tree, direction = "downwards")</code></td>
+</tr>
+<tr class="odd">
+<td><code>use.edge.length</code></td>
+<td>Use branch lengths (<code>TRUE</code>) or equal lengths (<code>FALSE</code>)</td>
+<td><code>plot(tree, use.edge.length = FALSE)</code></td>
+</tr>
+<tr class="even">
+<td><code>show.tip.label</code></td>
+<td>Show/hide tip labels</td>
+<td><code>plot(tree, show.tip.label=FALSE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>cex</code></td>
+<td>Font/label size</td>
+<td><code>plot(tree, cex=0.8)</code></td>
+</tr>
+<tr class="even">
+<td><code>label.offset</code></td>
+<td>Space between labels and tree</td>
+<td><code>plot(tree, label.offset=0.01)</code></td>
+</tr>
+<tr class="odd">
+<td><code>no.margin</code></td>
+<td>Remove plot margins</td>
+<td><code>plot(tree, no.margin=TRUE)</code></td>
+</tr>
+<tr class="even">
+<td><code>edge.width</code></td>
+<td>Line thickness</td>
+<td><code>plot(tree, edge.width=2)</code></td>
+</tr>
+<tr class="odd">
+<td><code>edge.color</code></td>
+<td>Color of edges</td>
+<td><code>plot(tree, edge.color="blue")</code></td>
+</tr>
+</tbody>
+</table>
 <p>We can also use the <code>title()</code> function to add a title.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.phylo</span>(tree, </span>
@@ -645,6 +716,19 @@ Time difference of 0 secs</code></pre>
 <p><img src="03-msa_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="CHALLENGE">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+CHALLENGE
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try customizing your tree in various ways. Use the Help pane to look at documentation for <code>plot.phylo()</code> if necessary</p>
 </div>
 </div>
 
