@@ -156,9 +156,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ncbi-data-and-the-rentrez-package" id="toc-ncbi-data-and-the-rentrez-package" class="nav-link" data-scroll-target="#ncbi-data-and-the-rentrez-package">NCBI data and the <strong><code>rentrez</code></strong> package</a></li>
   <li><a href="#finding-and-fetching-a-sequence" id="toc-finding-and-fetching-a-sequence" class="nav-link" data-scroll-target="#finding-and-fetching-a-sequence">Finding and fetching a sequence</a>
   <ul class="collapse">
-  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists">Lists</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself">Try it Yourself</a></li>
   </ul></li>
-  <li><a href="#manipulating-sequences" id="toc-manipulating-sequences" class="nav-link" data-scroll-target="#manipulating-sequences">Manipulating sequences</a></li>
+  <li><a href="#manipulating-sequences-with-biostrings" id="toc-manipulating-sequences-with-biostrings" class="nav-link" data-scroll-target="#manipulating-sequences-with-biostrings">Manipulating sequences with <strong><code>Biostrings</code></strong></a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/edit/main/02-rentrez.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -290,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>You can check out the <a href="https://docs.ropensci.org/rentrez/"><code>rentrez</code> documentation</a>] for more information on these and other functions.</p>
+<p>You can check out the <a href="https://docs.ropensci.org/rentrez/"><code>rentrez</code> documentation</a> for more information on these and other functions.</p>
 </section>
 <section id="finding-and-fetching-a-sequence" class="level2">
 <h2 class="anchored" data-anchor-id="finding-and-fetching-a-sequence">Finding and fetching a sequence</h2>
@@ -307,8 +307,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>search_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_search</span>(<span class="at">db=</span><span class="st">"gene"</span>, </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">term =</span><span class="st">"TP53[gene] AND human[orgn]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="lists" class="level3">
-<h3 class="anchored" data-anchor-id="lists">Lists</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Lists
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Let’s take a closer look at the results we get from our search. The <code>search_tp53_hs</code> object is a structure called a <strong>list</strong>. Recall that a vector is a one-dimensional data structure in R where every element must be of the same type. Lists are one-dimensional data structures where elements can be anything, even data frames or other lists. Lists are a common way to store hierarchical data, like XML or JSON data formats. You’ll find that it is very common for data to be stored as a list in bioinformatics workflows.</p>
 <table class="caption-top table">
 <colgroup>
@@ -336,35 +344,130 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>To access items in a list, you can use <code>$</code> or <code>[[]]</code>.</p>
+<p>To access items in a list, you can use <code>$</code> or <code>[[]]</code>, similar to accessing vectors in a dataframe. There are five elements in our search object:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Element</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>count</code></td>
+<td>Total number of records in the database that match the search query.</td>
+</tr>
+<tr class="even">
+<td><code>retmax</code></td>
+<td>The number of IDs returned in the <code>ids</code> vector (default is 20, can be changed).</td>
+</tr>
+<tr class="odd">
+<td><code>ids</code></td>
+<td>A character vector of NCBI record IDs that matched the search.</td>
+</tr>
+<tr class="even">
+<td><code>QueryTranslation</code></td>
+<td>Shows how NCBI interpreted and expanded your search query using synonyms etc.</td>
+</tr>
+<tr class="odd">
+<td><code>file</code></td>
+<td>A temporary file storing your search results (used internally by rentrez).</td>
+</tr>
+</tbody>
+</table>
+<p>We can look closer at the <code>ids</code> element:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_link</span>(<span class="at">dbfrom=</span><span class="st">"gene"</span>, </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">id=</span>search_tp53_hs<span class="sc">$</span>ids, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">db=</span><span class="st">"nuccore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>search_tp53_hs<span class="sc">$</span>ids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "7157"</code></pre>
 </div>
+</div>
+<p>or</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fetch_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_fetch</span>(<span class="at">db=</span><span class="st">"nuccore"</span>,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">id=</span>link_tp53_hs<span class="sc">$</span>links<span class="sc">$</span>gene_nuccore_refseqgene, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rettype =</span> <span class="st">"fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>search_tp53_hs[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "7157"</code></pre>
 </div>
+</div>
+</div>
+</div>
+<p>The ids will likely be the most important part of the search object. You can use those ids with <code>entrez_summary()</code>, <code>entrez_link()</code> and <code>entrez_fetch()</code>.</p>
+<p>Let’s use the id to see if there are records for human TP53 in the <strong>nucleotide</strong> database. While Gene contains metadata about genes, <strong>nucleotide</strong> contains the actual sequences. There are three main arguments you need to supply to the link function:</p>
+<ul>
+<li><code>dbfrom</code> character name of database from which the id(s) originate</li>
+<li><code>ids</code> vector with unique ID(s) for records in database db</li>
+<li><code>db</code> character name of database in which to search for links. Use “all” to search for links in all databases.</li>
+</ul>
+<p>So we are going to search from gene with the id we retrieved from our search, and look in “nuccore”, the name for <strong>nucleotide</strong> in the Entrez system.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(fetch_tp53_hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_link</span>(<span class="at">dbfrom=</span><span class="st">"gene"</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">id=</span>search_tp53_hs<span class="sc">$</span>ids, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">db=</span><span class="st">"nuccore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Let’s take a closer look at the <code>links</code> element of our link object</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(fetch_tp53_hs, <span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs<span class="sc">$</span>links</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>elink result with information from 4 databases:
+[1] gene_nuccore            gene_nuccore_mgc        gene_nuccore_refseqgene
+[4] gene_nuccore_refseqrna </code></pre>
 </div>
+</div>
+<p>This is saying there are related records for this gene in the general nucleotide collection, as well as in three subsets: Mammalian Gene Collection, RefSeqGene and RefSeqRNA. We will be especially interested in the RefSeqGene sequence. RefSeq, short for Reference Sequence, is NCBI’s curated collection of consensus sequences. These are likely to be higher quality than other sequences, so it is a good idea to use them for your analysis when possible.</p>
+<p>We can access the RefSeqGene id:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>link_tp53_hs<span class="sc">$</span>links<span class="sc">$</span>gene_nuccore_refseqgene</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "383209646"</code></pre>
+</div>
+</div>
+<p>Now we have the id for the sequence we want to look at, we use <code>entrez_fetch()</code>, which requires three arguments</p>
+<ul>
+<li><code>db</code> character name of the database to use</li>
+<li><code>id</code> vector of unique ID(s) for records in database <code>db</code></li>
+<li><code>rettype</code> - character name of the format in which to return record, such as fasta or xml. We will ask for our record in fasta format, a common plain text way of representing sequence data.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fetch_tp53_hs <span class="ot">&lt;-</span> <span class="fu">entrez_fetch</span>(<span class="at">db=</span><span class="st">"nuccore"</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">id=</span>link_tp53_hs<span class="sc">$</span>links<span class="sc">$</span>gene_nuccore_refseqgene, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rettype =</span> <span class="st">"fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s take a look at our sequence in the console. You can see it’s pretty simple, just a header line starting with <code>&gt;</code> and the sequence of bases.</p>
+<p>When we print it to the console as usual, we see a lot of <code>\n</code> characters which is the newline symbol.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fetch_tp53_hs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can use the cat function to print it out a little more nicely.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(fetch_tp53_hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can also save this to a file</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(fetch_tp53_hs, <span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="try-it-yourself" class="level3">
+<h3 class="anchored" data-anchor-id="try-it-yourself">Try it Yourself</h3>
 </section>
 </section>
-<section id="manipulating-sequences" class="level2">
-<h2 class="anchored" data-anchor-id="manipulating-sequences">Manipulating sequences</h2>
+<section id="manipulating-sequences-with-biostrings" class="level2">
+<h2 class="anchored" data-anchor-id="manipulating-sequences-with-biostrings">Manipulating sequences with <strong><code>Biostrings</code></strong></h2>
+<p>Now we will use the <strong><code>Biostrings</code></strong> package from Bioconductor to read in our fasta file and save it as the specialized class <code>XStringSet</code> which essentially serves as a container sets of biological sequence data. The X can be replaced by the appropriate molecule: DNA, RNA, or AA for proteins. So here we are saving our object as a <code>DNAStringSet</code></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fasta <span class="ot">&lt;-</span> <span class="fu">readDNAStringSet</span>(<span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fasta <span class="ot">&lt;-</span> <span class="fu">readDNAStringSet</span>(<span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>XStringSets</code> are made up of <code>XString</code> objects. That is, each sequence in a <code>XStringSet</code> is a <code>XString</code> object. Even though our fasta file only contains one sequence, we still save it as an <code>DNAStringSet</code>. We can specifically pull out our sequence into a <code>DNAStringSet</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dna_tp53_human <span class="ot">&lt;-</span> fasta[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dna_tp53_human <span class="ot">&lt;-</span> fasta[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>As you work more with bioinformatics packages, you’ll find that many of them create these kinds of specialized classes, and you’ll be able to put together workflows of packages designed to work with each other’s data structures.</p>
+<p>Now we have our <code>DNAString</code> object, we can use BioStrings to get summary statistics and manipulate it to other objects.</p>
+<p>First we can use <code>alphabetFrequency</code> to get the frequence of bases in our sequence.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   A    C    G    T    M    R    W    S    Y    K    V    H    D    B    N    - 
 8647 7986 8058 8081    0    0    0    0    0    0    0    0    0    0    0    0 
@@ -372,30 +475,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    0    0 </code></pre>
 </div>
 </div>
+<p>In addition to the four bases ACGT, it also contains several other codes that indicate ambiguous bases. This is a high quality consensus RefSeq sequence though, so we do not have any ambiguous bases.</p>
+<p>We can specify we are only interested in ACGT counts by specifying the argument <code>baseOnly = TRUE</code></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human, <span class="at">baseOnly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alphabetFrequency</span>(dna_tp53_human, <span class="at">baseOnly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    A     C     G     T other 
  8647  7986  8058  8081     0 </code></pre>
 </div>
 </div>
+<p>To look for a specific base or base, we can use <code>letterFrequency</code> instead of <code>alphabetFrequency</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>gc_content <span class="ot">&lt;-</span> <span class="fu">letterFrequency</span>(dna_tp53_human, </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">letters =</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"C"</span>), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">as.prob=</span><span class="cn">TRUE</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(gc_content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gc_content <span class="ot">&lt;-</span> <span class="fu">letterFrequency</span>(dna_tp53_human, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">letters =</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"C"</span>), </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">as.prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(gc_content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4895643</code></pre>
 </div>
 </div>
+<p>We can also use <code>Biostrings</code> to generate the complement of the DNA strand, the reverse, and the reverse complement.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tp53_comp <span class="ot">&lt;-</span> <span class="fu">complement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>tp53_comp <span class="ot">&lt;-</span> <span class="fu">complement</span>(dna_tp53_human)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>tp53_rev <span class="ot">&lt;-</span> <span class="fu">reverse</span>(dna_tp53_human)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>tp53_rev_comp <span class="ot">&lt;-</span> <span class="fu">reverseComplement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Let’s compare:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tp53_rev <span class="ot">&lt;-</span> <span class="fu">reverse</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dna_tp53_human</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>tp53_comp</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>tp53_rev</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>tp53_rev_comp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>32772-letter DNAString object
+seq: CTCCTTGGTTCAAGTAATTCTCCTGCCTCAGACTCC...AAAAAAAAGATACTACAAAGTCAAGAGACAAACAAT
+32772-letter DNAString object
+seq: GAGGAACCAAGTTCATTAAGAGGACGGAGTCTGAGG...TTTTTTTTCTATGATGTTTCAGTTCTCTGTTTGTTA
+32772-letter DNAString object
+seq: TAACAAACAGAGAACTGAAACATCATAGAAAAAAAA...CCTCAGACTCCGTCCTCTTAATGAACTTGGTTCCTC
+32772-letter DNAString object
+seq: ATTGTTTGTCTCTTGACTTTGTAGTATCTTTTTTTT...GGAGTCTGAGGCAGGAGAATTACTTGAACCAAGGAG</code></pre>
 </div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tp53_rev_comp <span class="ot">&lt;-</span> <span class="fu">reverseComplement</span>(dna_tp53_human)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
