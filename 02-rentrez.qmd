@@ -57,7 +57,7 @@ The functions of `rentrez` are designed to work together. The main ones we will 
 | `entrez_fetch()`          | Download full records (e.g., FASTA, GenBank, XML).                      |
 | `entrez_link()`           | Find related data across NCBI databases.      
 
-You can check out the [`rentrez` documentation](https://docs.ropensci.org/rentrez/)] for more information on these and other functions.
+You can check out the [`rentrez` documentation](https://docs.ropensci.org/rentrez/) for more information on these and other functions.
 
 
 ## Finding and fetching a sequence
@@ -77,6 +77,7 @@ search_tp53_hs <- entrez_search(db="gene",
                                 term ="TP53[gene] AND human[orgn]")
 ```
 
+::: {.callout-note}
 ### Lists
 Let's take a closer look at the results we get from our search. The `search_tp53_hs` object is a structure called a **list**. Recall that a vector is a one-dimensional data structure in R where every element must be of the same type. Lists are one-dimensional data structures where elements can be anything, even data frames or other lists. Lists are a common way to store hierarchical data, like XML or JSON data formats. You'll find that it is very common for data to be stored as a list in bioinformatics workflows.
 
@@ -88,10 +89,40 @@ Let's take a closer look at the results we get from our search. The `search_tp53
 | **2D**         | **Matrix**<br>All elements of the same type    | **Data Frame**<br>Each column can differ in type |
 
 
+To access items in a list, you can use `$` or `[[]]`, similar to accessing vectors in a dataframe. There are five elements in our search object:
 
-To access items in a list, you can use `$` or `[[]]`.
+| **Element**        | **Description**                                                                |
+| -------------------|--------------------------------------------------------------------------------|
+| `count`            | Total number of records in the database that match the search query.           |
+| `retmax`           | The number of IDs returned in the `ids` vector (default is 20, can be changed).|
+| `ids`              | A character vector of NCBI record IDs that matched the search.                 |
+| `QueryTranslation` | Shows how NCBI interpreted and expanded your search query using synonyms etc.  |
+| `file`             | A temporary file storing your search results (used internally by rentrez).     |
 
 
+We can look closer at the `ids` element:
+
+```{r}
+search_tp53_hs$ids
+```
+
+or 
+
+```{r}
+search_tp53_hs[[1]]
+```
+:::
+
+The ids will likely be the most important part of the search object. You can use those ids with `entrez_summary()`, `entrez_link()` and `entrez_fetch()`.
+
+Let's use the id to see if there are records for human TP53 in the **nucleotide** database. While Gene contains metadata about genes,  **nucleotide** contains the actual sequences. 
+There are three main arguments you need to supply to the link function:
+
+- `dbfrom` character name of database from which the id(s) originate
+- `ids` vector with unique ID(s) for records in database db
+- `db` character name of database in which to search for links. Use "all" to search for links in all databases.
+
+So we are going to search from gene with the id we retrieved from our search, and look in "nuccore", the name for **nucleotide** in the Entrez system.
 
 ```{r}
 link_tp53_hs <- entrez_link(dbfrom="gene", 
@@ -99,56 +130,113 @@ link_tp53_hs <- entrez_link(dbfrom="gene",
                             db="nuccore")
 ```
 
+Let's take a closer look at the `links` element of our link object
+
+```{r}
+link_tp53_hs$links
+```
+ This is saying there are related records for this gene in the general nucleotide collection, as well as in three subsets: Mammalian Gene Collection, RefSeqGene and RefSeqRNA. We will be especially interested in the RefSeqGene sequence. RefSeq, short for Reference Sequence, is NCBI's curated collection of consensus sequences. These are likely to be higher quality than other sequences, so it is a good idea to use them for your analysis when possible.
+ 
+We can access the RefSeqGene id:
+
+```{r}
+link_tp53_hs$links$gene_nuccore_refseqgene
+```
+
+Now we have the id for the sequence we want to look at, we use `entrez_fetch()`, which requires three arguments
+
+- `db` character name of the database to use
+- `id` vector of unique ID(s) for records in database `db`
+- `rettype` - character name of the format in which to return record, such as fasta or xml. We will ask for our record in fasta format, a common plain text way of representing sequence data.
+
 ```{r}
 fetch_tp53_hs <- entrez_fetch(db="nuccore",
                               id=link_tp53_hs$links$gene_nuccore_refseqgene, 
                               rettype = "fasta")
 ```
 
+Now let's take a look at our sequence in the console. You can see it's pretty simple, just a header line starting with `>` and the sequence of bases.
+
+When we print it to the console as usual, we see a lot of `\n` characters which is the newline symbol. 
+
+```{r}
+#| output: false
+fetch_tp53_hs
+```
+
+We can use the cat function to print it out a little more nicely.
 
 ```{r}
 #| output: false
 cat(fetch_tp53_hs)
 ```
 
+We can also save this to a file
+
 ```{r}
 writeLines(fetch_tp53_hs, "data/tp53_human.fasta")
 ```
 
+### Try it Yourself
 
-## Manipulating sequences
+
+## Manipulating sequences with **`Biostrings`**
+
+Now we will use the **`Biostrings`** package from Bioconductor to read in our fasta file and save it as the specialized class `XStringSet` which essentially serves as a container sets of biological sequence data. The X can be replaced by the appropriate molecule: DNA, RNA, or AA for proteins. So here we are saving our object as a `DNAStringSet`
 
 ```{r}
 fasta <- readDNAStringSet("data/tp53_human.fasta")
 ```
 
+`XStringSets` are made up of `XString` objects. That is, each sequence in a `XStringSet` is a `XString` object. Even though our fasta file only contains one sequence, we still save it as an `DNAStringSet`. We can specifically pull out our sequence into a `DNAStringSet` object.
 ```{r}
 dna_tp53_human <- fasta[[1]]
 ```
 
+As you work more with bioinformatics packages, you'll find that many of them create these kinds of specialized classes, and you'll be able to put together workflows of packages designed to work with each other's data structures.
+
+Now we have our `DNAString` object, we can use BioStrings to get summary statistics and manipulate it to other objects.
+
+First we can use `alphabetFrequency` to get the frequence of bases in our sequence.
+
 ```{r}
 alphabetFrequency(dna_tp53_human)
 ```
+In addition to the four bases ACGT, it also contains several other codes that indicate ambiguous bases. This is a high quality consensus RefSeq sequence though, so we do not have any ambiguous bases.
+
+We can specify we are only interested in ACGT counts by specifying the argument `baseOnly = TRUE`
 
 ```{r}
 alphabetFrequency(dna_tp53_human, baseOnly = TRUE)
 ```
+
+To look for a specific base or base, we can use `letterFrequency` instead of `alphabetFrequency`:
+
 
 ```{r}
 gc_content <- letterFrequency(dna_tp53_human, 
                               letters = c("G", "C"), 
                               as.prob=TRUE)
 sum(gc_content)
+
 ```
 
+We can also use `Biostrings` to generate the complement of the DNA strand, the reverse, and the reverse complement.
 ```{r}
 tp53_comp <- complement(dna_tp53_human)
-```
-
-```{r}
 tp53_rev <- reverse(dna_tp53_human)
-```
-
-```{r}
 tp53_rev_comp <- reverseComplement(dna_tp53_human)
 ```
+
+Let's compare:
+
+```{r}
+#| results: hold
+dna_tp53_human
+tp53_comp
+tp53_rev
+tp53_rev_comp
+
+```
+
+
