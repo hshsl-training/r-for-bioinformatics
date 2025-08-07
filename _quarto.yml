@@ -19,9 +19,9 @@ website:
     left:
       - text: "Home"
         file: index.qmd
-      - text: "Introduction"
+      - text: "Getting Set Up"
         file: 01-GettingSetUp.qmd
-      - text: "Finding Sequences"
+      - text: "Finding and Manipulating Sequences"
         file: 02-rentrez.qmd
      # - sidebar:sidebar id - repeat as needed for sidebar entries
     

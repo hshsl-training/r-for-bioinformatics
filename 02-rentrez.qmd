@@ -1,5 +1,5 @@
 ---
-title: "Accessing NCBI data with rentrez"
+title: "Accessing and manipulating biological sequences"
 editor: source
 format: html
 toc: true
