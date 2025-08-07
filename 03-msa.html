@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Multiple Sequence Alignment and Phylogenetic Analyses –</title>
+<title>Building a Bioinformatics Workflow –</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -156,8 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#getting-protein-sequences-with-rentrez" id="toc-getting-protein-sequences-with-rentrez" class="nav-link" data-scroll-target="#getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></a></li>
+  <li><a href="#getting-protein-sequences-with-rentrez" id="toc-getting-protein-sequences-with-rentrez" class="nav-link active" data-scroll-target="#getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></a></li>
   <li><a href="#pairwise-alignment" id="toc-pairwise-alignment" class="nav-link" data-scroll-target="#pairwise-alignment">Pairwise Alignment</a></li>
   <li><a href="#multiple-sequence-alignment" id="toc-multiple-sequence-alignment" class="nav-link" data-scroll-target="#multiple-sequence-alignment">Multiple Sequence Alignment</a></li>
   <li><a href="#building-a-phylogenetic-tree" id="toc-building-a-phylogenetic-tree" class="nav-link" data-scroll-target="#building-a-phylogenetic-tree">Building a Phylogenetic Tree</a></li>
@@ -169,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Multiple Sequence Alignment and Phylogenetic Analyses</h1>
+<h1 class="title">Building a Bioinformatics Workflow</h1>
 </div>
 
 
@@ -186,10 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <p>In this section, we will work through an entire workflow for finding protein sequences, aligning them, and using that alignment to create a phylogenetic tree.</p>
-</section>
 <section id="getting-protein-sequences-with-rentrez" class="level2">
 <h2 class="anchored" data-anchor-id="getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></h2>
 <p>We previously looked for the nucleotide sequence for the human TP53 gene. Our goal in this lesson will be to find <strong>orthologs</strong> of that gene. An ortholog is a gene in different species that evolved from a common ancestral gene through speciation and typically retains the same function.</p>
@@ -621,13 +617,32 @@ Time difference of 0 secs</code></pre>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">nj</span>(dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Finally, we can plot our tree.</p>
+<p>Finally, we can plot our tree, using a variation of base R<code>plot()</code>. <code>plot.phylo()</code> requires an object of class <code>phylo</code>, which we created</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.phylo</span>(tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="03-msa_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are several ways you can customize your plot. Here are some examples: | Argument | Description | Example | | —————– | —————————————————————————- | ————————————- | | <code>type</code> | Tree layout: <code>"phylogram"</code>, <code>"cladogram"</code>, <code>"fan"</code>, <code>"unrooted"</code>, <code>"radial"</code> | <code>plot(tree, type = "fan")</code> | | <code>direction</code> | Direction: <code>"rightwards"</code>, <code>"leftwards"</code>, <code>"upwards"</code>, <code>"downwards"</code> | <code>plot(tree, direction = "downwards")</code> | | <code>use.edge.length</code> | Use branch lengths (<code>TRUE</code>) or equal lengths (<code>FALSE</code>) | <code>plot(tree, use.edge.length = FALSE)</code> | | <code>show.tip.label</code> | Show/hide tip labels | <code>plot(tree, show.tip.label=FALSE)</code> | | <code>cex</code> | Font/label size | <code>plot(tree, cex=0.8)</code> | | <code>label.offset</code> | Space between labels and tree | <code>plot(tree, label.offset=0.01)</code> | | <code>no.margin</code> | Remove plot margins | <code>plot(tree, no.margin=TRUE)</code> | | <code>edge.width</code> | Line thickness | <code>plot(tree, edge.width=2)</code> | | <code>edge.color</code> | Color of edges | <code>plot(tree, edge.color="blue")</code> |</p>
+<p>We can also use the <code>title()</code> function to add a title.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.phylo</span>(tree, </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">label.offset =</span> <span class="fl">0.2</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">direction =</span> <span class="st">"left"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">edge.width =</span> <span class="dv">2</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">edge.color =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">font =</span> <span class="dv">1</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">use.edge.length =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="at">main =</span> <span class="st">"TP53 Protein-Based Phylogeny of Selected Vertebrate Species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-msa_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
 </figure>
 </div>
 </div>

@@ -160,7 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ncbi-data-and-the-rentrez-package" id="toc-ncbi-data-and-the-rentrez-package" class="nav-link" data-scroll-target="#ncbi-data-and-the-rentrez-package">NCBI data and the <strong><code>rentrez</code></strong> package</a></li>
   <li><a href="#finding-and-fetching-a-sequence" id="toc-finding-and-fetching-a-sequence" class="nav-link" data-scroll-target="#finding-and-fetching-a-sequence">Finding and fetching a sequence</a>
   <ul class="collapse">
-  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself">Try it Yourself</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself">Try it Yourself!</a></li>
   </ul></li>
   <li><a href="#manipulating-sequences-with-biostrings" id="toc-manipulating-sequences-with-biostrings" class="nav-link" data-scroll-target="#manipulating-sequences-with-biostrings">Manipulating sequences with <strong><code>Biostrings</code></strong></a></li>
   </ul>
@@ -191,9 +191,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <ul>
-<li>Practice putting together a bioinformatics workflow</li>
-<li>Understand how to programmatically access NCBI databases</li>
-<li></li>
+<li>Be able to name some main NCBI databases and their purposes</li>
+<li>Become familiar with the <code>rentrez</code> core functions and how they are related.</li>
+<li>Understand how to programmatically access NCBI data.</li>
+<li>Use R to analyze and manipulate a biological sequence</li>
 </ul>
 </section>
 <section id="ncbi-data-and-the-rentrez-package" class="level2">
@@ -454,7 +455,44 @@ Lists
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(fetch_tp53_hs, <span class="st">"data/tp53_human.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="try-it-yourself" class="level3">
-<h3 class="anchored" data-anchor-id="try-it-yourself">Try it Yourself</h3>
+<h3 class="anchored" data-anchor-id="try-it-yourself">Try it Yourself!</h3>
+<div class="callout callout-style-default callout-tip callout-titled" title="CHALLENGE">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+CHALLENGE
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Look up which fields are searchable in the <code>Protein</code> database.</li>
+<li>Search <code>Gene</code> for the BRCA1 gene in humans. What id is returned?</li>
+<li>Use <code>entrez_link()</code> to find <strong>all</strong> databases that have a link to this Gene record. How many databases are linked? How many related records are there in Pubmed?</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><code>entrez_db_searchable("protein")</code></li>
+<li><code>brca1_search &lt;- entrez_search(db = "gene", term = "BRCA1[gene] AND human[orgn]")</code> <br> <code>brca1_search$ids</code></li>
+<li><code>brca1_link &lt;- entrez_link(dbfrom = "gene", id = test_search$ids, db = "all")</code><br> <code>brca1_link$links</code><br> <code>brca1_links$links$gene_pubmed</code></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="manipulating-sequences-with-biostrings" class="level2">
