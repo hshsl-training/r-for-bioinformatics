@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Multiple Sequence Alignment and Phylogenetic Analyses –</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-dc64d301017c2e249433d9b3d1a3f4c9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="https://www2.hshsl.umaryland.edu/cdabs/" class="navbar-brand navbar-brand-logo">
+    <img src="https://www2.hshsl.umaryland.edu/hshsl/bin/img/logo_white@2x.png" alt="HSHSL logo" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="https://www2.hshsl.umaryland.edu/cdabs/">
+    <span class="navbar-title"></span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./01-GettingSetUp.html"> 
+<span class="menu-text">Getting Set Up</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./02-rentrez.html"> 
+<span class="menu-text">Finding and Manipulating Sequences</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#getting-protein-sequences-with-rentrez" id="toc-getting-protein-sequences-with-rentrez" class="nav-link" data-scroll-target="#getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></a></li>
+  <li><a href="#pairwise-alignment" id="toc-pairwise-alignment" class="nav-link" data-scroll-target="#pairwise-alignment">Pairwise Alignment</a></li>
+  <li><a href="#multiple-sequence-alignment" id="toc-multiple-sequence-alignment" class="nav-link" data-scroll-target="#multiple-sequence-alignment">Multiple Sequence Alignment</a></li>
+  <li><a href="#building-a-phylogenetic-tree" id="toc-building-a-phylogenetic-tree" class="nav-link" data-scroll-target="#building-a-phylogenetic-tree">Building a Phylogenetic Tree</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/edit/main/03-msa.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multiple Sequence Alignment and Phylogenetic Analyses</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<p>In this section, we will work through an entire workflow for finding protein sequences, aligning them, and using that alignment to create a phylogenetic tree.</p>
+</section>
+<section id="getting-protein-sequences-with-rentrez" class="level2">
+<h2 class="anchored" data-anchor-id="getting-protein-sequences-with-rentrez">Getting protein sequences with <strong><code>rentrez</code></strong></h2>
+<p>We previously looked for the nucleotide sequence for the human TP53 gene. Our goal in this lesson will be to find <strong>orthologs</strong> of that gene. An ortholog is a gene in different species that evolved from a common ancestral gene through speciation and typically retains the same function.</p>
+<p>First, let’s build our query to use in <code>entrez_search()</code>. You can write the query directly in the <code>term</code> argument of the function, but sometimes it can be cleaner to create a separate object to store your query. Especially if it is a more complicated one. We’re going to use the <code>gene homologene</code> filter to look for our homologous sequences.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="st">"TP53[gene name] AND gene homologene[filter]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s add that query to our search</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tp53_homologs <span class="ot">&lt;-</span> <span class="fu">entrez_search</span>(<span class="at">db=</span><span class="st">"gene"</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">term =</span> query)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our search returned 9 ids for homologous genes</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tp53_homologs<span class="sc">$</span>ids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "7157"   "22059"  "24842"  "30590"  "403869" "281542" "716170" "431679"
+[9] "455214"</code></pre>
+</div>
+</div>
+<p>Before fetching any sequences, let’s take a closer look at some metadata for these records with the function <code>entrez_summary()</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>search_summ <span class="ot">&lt;-</span> <span class="fu">entrez_summary</span>(<span class="at">db=</span><span class="st">"gene"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">id=</span>tp53_homologs<span class="sc">$</span>ids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The summary object is another list, with an element for each id, and each of those elements contains metadata fields, some of which have more nested metadata fields. The original records are stored in Entrez as XML files. XML is a hierarchical data structure, and in R those kinds of structures are represented as lists.</p>
+<p>To make it simpler to navigate this nested structure, we can use the function <code>extract_from_esummary()</code> to pull out one or more fields to look at.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>extract <span class="ot">&lt;-</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_from_esummary</span>(search_summ, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">elements =</span> <span class="st">"organism"</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">simplify =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The extract returns a matrix, another important R data structure. With a little work, we can turn the matrix into a more familiar looking data frame. Matrices are two dimensional like data frames (i.e.&nbsp;they have columns and rows), but the data must be homogenous (of the same type). Note that a matrix has named columns and rows.</p>
+<p>First we can transpose the columns and rows with <code>t()</code>, so that the fields are columns and the rows are records.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t_extract <span class="ot">&lt;-</span> <span class="fu">t</span>(extract)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can try to coerce this transposed matrix to a tibble with the <code>as_tibble</code> function. This still maintains the uids as rownames, so we can use the <code>rownames=</code> argument to put those rownames in a new column called <code>uid</code>. We now have a tibble of list-columns. Most of the columns are actually lists. We can use <code>unnest()</code> to turn them into regular data frame columns.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(t_extract, <span class="at">rownames =</span> <span class="st">"uid"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s use <code>entrez_link()</code> to find links from these ids in the <strong>Protein</strong> database which contains amino acid sequences.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>protein_links <span class="ot">&lt;-</span> <span class="fu">entrez_link</span>(<span class="at">dbfrom =</span> <span class="st">"gene"</span>, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">id =</span> df<span class="sc">$</span>uid, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">db=</span><span class="st">"protein"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This found 58 sequences in the <code>protein_refseq</code> collection. Let’s use <code>entrez_summary</code> again to get an overview of what these sequences are.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>link_summary <span class="ot">&lt;-</span> <span class="fu">entrez_summary</span>(<span class="at">db=</span><span class="st">"protein"</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">id=</span>protein_links<span class="sc">$</span>links<span class="sc">$</span>gene_protein_refseq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And <code>extract_from_esummary()</code> to view these elements more easily.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>link_extract <span class="ot">&lt;-</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_from_esummary</span>(link_summary,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">elements =</span> <span class="fu">c</span>(<span class="st">"uid"</span>, <span class="st">"caption"</span>, <span class="st">"slen"</span>, <span class="st">"organism"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>link_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">t</span>(link_extract)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We see now that our search returned multiple protein sequences for some species. For our analysis, we want just one sequence per species. So we can group our data frame by organism, and then sort by the caption (accession number) and sequence length (slen). Finally we use the <code>slice()</code> function to pull out just the first row of each group.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A note about RefSeq accession numbers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The RefSeq accession number naming scheme from NCBI uses prefixes to indicate the type and status of the sequence record. For example:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 18%">
+<col style="width: 60%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Prefix</th>
+<th>Type of Sequence</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>NM_</strong></td>
+<td>mRNA</td>
+<td><strong>Curated</strong></td>
+<td>A manually reviewed and curated transcript (messenger RNA).</td>
+</tr>
+<tr class="even">
+<td><strong>NP_</strong></td>
+<td>Protein</td>
+<td><strong>Curated</strong></td>
+<td>A protein sequence derived from an NM_ transcript.</td>
+</tr>
+<tr class="odd">
+<td><strong>NC_</strong></td>
+<td>Genomic DNA</td>
+<td><strong>Curated</strong></td>
+<td>A reference genomic contig or chromosome.</td>
+</tr>
+<tr class="even">
+<td><strong>NG_</strong></td>
+<td>Genomic region</td>
+<td><strong>Curated</strong></td>
+<td>A curated genomic region (e.g., a gene with its regulatory elements).</td>
+</tr>
+<tr class="odd">
+<td><strong>XM_</strong></td>
+<td>mRNA</td>
+<td><strong>Predicted (Model)</strong></td>
+<td>A computationally predicted transcript (not manually reviewed).</td>
+</tr>
+<tr class="even">
+<td><strong>XP_</strong></td>
+<td>Protein</td>
+<td><strong>Predicted (Model)</strong></td>
+<td>A protein sequence derived from an XM_ transcript.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>NM_ and NP_ always go together — NM_ is the transcript, NP_ is the corresponding protein.</li>
+<li>XM_ and XP_ serve the same function as NM_ and NP_, but are generated through computational predictions (often for less well-characterized organisms or isoforms).</li>
+<li>NC_ and NG_ are genomic-level references, where NC_ is often a whole chromosome and NG_ might cover a specific gene region with context.</li>
+</ul>
+</div>
+</div>
+<p>When we select our species, we want to choose NP_ sequences when possible over the predicted XP_ sequences. We will also choose the longest sequence available.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>one_per_species <span class="ot">&lt;-</span> link_df <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(organism) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(caption, <span class="fu">desc</span>(slen), <span class="at">.by_group =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we have ids for 9 protein sequences, so we can retrieve them with <code>entrez_fetch</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tp53_fasta <span class="ot">&lt;-</span> <span class="fu">entrez_fetch</span>(<span class="at">db =</span> <span class="st">"protein"</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">id =</span> one_per_species<span class="sc">$</span>uid , </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">rettype =</span> <span class="st">"fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(tp53_fasta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, let’s save our sequences to a fasta file.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(tp53_fasta, <span class="st">"data/tp53_orthologs.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pairwise-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="pairwise-alignment">Pairwise Alignment</h2>
+<p>Now we can start to compare our sequences with each other. First let’s compare just two sequences.</p>
+<p>We can use <code>Biostrings</code> again to import our fasta file. This time, since we’re working with proteins, we’ll use the function <code>readAAStringSet()</code></p>
+<p>Our <code>AAStringSet</code> object now contains multiple sequences. We can access them with bracket notation.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>orthologs <span class="ot">&lt;-</span> <span class="fu">readAAStringSet</span>(<span class="st">"data/tp53_orthologs.fasta"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>orthologs[<span class="dv">1</span>] <span class="co">#look at first sequence</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AAStringSet object of length 1:
+    width seq                                               names               
+[1]   386 MEESQAELNVEPPLSQETFSDLW...SKKRPSPSCHKKPMLKREGPDSD NP_776626.1 cellu...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>orthologs[<span class="dv">2</span>] <span class="co">#look at second sequence</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AAStringSet object of length 1:
+    width seq                                               names               
+[1]   381 MQEPQSELNIDPPLSQETFSELW...AKKGQSTSRHKKLMFKREGPDSD NP_001376147.1 ce...</code></pre>
+</div>
+</div>
+<p>One thing that will make our analysis more readable is if we clean up the names for each sequence. The names are derived from the header row of each sequence in fasta format.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(orthologs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "NP_776626.1 cellular tumor antigen p53 [Bos taurus]"                    
+[2] "NP_001376147.1 cellular tumor antigen p53 [Canis lupus familiaris]"     
+[3] "NP_001258749.1 cellular tumor antigen p53 isoform 1 [Danio rerio]"      
+[4] "NP_000537.3 cellular tumor antigen p53 isoform a [Homo sapiens]"        
+[5] "NP_001040616.1 cellular tumor antigen p53 [Macaca mulatta]"             
+[6] "NP_001120705.1 cellular tumor antigen p53 isoform b [Mus musculus]"     
+[7] "XP_001172077.2 cellular tumor antigen p53 isoform X2 [Pan troglodytes]" 
+[8] "NP_001416922.1 cellular tumor antigen p53 isoform a [Rattus norvegicus]"
+[9] "NP_001001903.1 cellular tumor antigen p53 [Xenopus tropicalis]"         </code></pre>
+</div>
+</div>
+<p>We can clean the names to get just the organism name. This will be useful later when we build our phylogenetic tree. To do this, we will use the <strong><code>stringr</code></strong> package from the tidyverse along with regular expressions. <strong>Regular expressions</strong> (or regex) are a concise language for describing patterns in strings.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Regex metacharacters
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 17%">
+<col style="width: 27%">
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Example</th>
+<th>Description</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.</code></td>
+<td>Any single character (except newline)</td>
+<td><code>"a.b"</code> matches <code>acb</code>, <code>arb</code></td>
+<td>Dot matches any character</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>0 or more of the preceding item</td>
+<td><code>"ab*c"</code> matches <code>ac</code>, <code>abc</code>, <code>abbc</code></td>
+<td>Matches zero or more occurrences</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>+</code></td>
+<td>1 or more of the preceding item</td>
+<td><code>"ab+c"</code> matches <code>abc</code>, <code>abbc</code> but <strong>not</strong> <code>ac</code></td>
+<td>Matches one or more occurrences</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>?</code></td>
+<td>0 or 1 of the preceding item</td>
+<td><code>"ab?c"</code> matches <code>ac</code>, <code>abc</code></td>
+<td>Matches zero or one occurrence</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>^</code></td>
+<td>Start of string</td>
+<td><code>"^a"</code> matches <code>apple</code> but not <code>banana</code></td>
+<td>Anchors the pattern to the beginning of the string</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>$</code></td>
+<td>End of string</td>
+<td><code>"e$"</code> matches <code>apple</code> but not <code>elephant</code></td>
+<td>Anchors the pattern to the end of the string</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>[]</code></td>
+<td>Character class</td>
+<td><code>"[abc]"</code> matches <code>a</code>, <code>b</code>, or <code>c</code></td>
+<td>Matches any one of the listed characters</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>[^]</code></td>
+<td>Negated character class</td>
+<td><code>"[^abc]"</code> matches any character <strong>except</strong> <code>a</code>, <code>b</code>, or <code>c</code></td>
+<td>Excludes characters</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>|</code></td>
+<td>Alternation (OR)</td>
+<td><code>"cat|dog"</code> matches <code>cat</code> or <code>dog</code></td>
+<td>Matches either the expression before or after the pipe</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>()</code></td>
+<td>Grouping or capturing</td>
+<td><code>"(ab)+"</code> matches <code>abab</code></td>
+<td>Groups elements or captures for back-referencing</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>{n}</code></td>
+<td>Exactly n times</td>
+<td><code>"a{3}"</code> matches <code>aaa</code></td>
+<td>Matches exactly n repetitions</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>{n,}</code></td>
+<td>At least n times</td>
+<td><code>"a{2,}"</code> matches <code>aa</code>, <code>aaa</code>, etc.</td>
+<td>Matches n or more repetitions</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>{n,m}</code></td>
+<td>Between n and m times</td>
+<td><code>"a{2,4}"</code> matches <code>aa</code>, <code>aaa</code>, <code>aaaa</code></td>
+<td>Matches between n and m repetitions</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>\\</code></td>
+<td>Escape character</td>
+<td><code>"\\."</code> matches <code>.</code> literally</td>
+<td>Escapes special characters</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Greedy vs Lazy Quantifiers</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 32%">
+<col style="width: 9%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Description</th>
+<th>Greedy?</th>
+<th>Example Match</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.*</code></td>
+<td>Any character, 0+ times</td>
+<td>Yes</td>
+<td>Matches from first <code>&lt;</code> to last <code>&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>.*?</code></td>
+<td>Any character, 0+ times</td>
+<td>No</td>
+<td>Matches just <code>&lt;tag&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>.+</code></td>
+<td>Any character, 1+ times</td>
+<td>Yes</td>
+<td>As much as possible</td>
+</tr>
+<tr class="even">
+<td><code>.+?</code></td>
+<td>Any character, 1+ times</td>
+<td>No</td>
+<td>As little as possible</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(orthologs) <span class="ot">&lt;-</span> <span class="fu">names</span>(orthologs) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_extract</span>(<span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">[.*?</span><span class="sc">\\</span><span class="st">]"</span>) <span class="sc">%&gt;%</span>   <span class="co">#extract all words enclosed in brackets</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(<span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">[|</span><span class="sc">\\</span><span class="st">]"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">replacement =</span> <span class="st">""</span>) <span class="co">#remove brackets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s do a pairwise alignment of the first two sequences in our orthologs object using the <strong><code>pwalign</code></strong> package.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>align_hs_mm <span class="ot">&lt;-</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  pwalign<span class="sc">::</span><span class="fu">pairwiseAlignment</span>(orthologs[<span class="dv">1</span>], orthologs[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To summarize that alignment, we can get the percent identity with the <code>pid()</code> function.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pwalign<span class="sc">::</span><span class="fu">pid</span>(align_hs_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 79.79275</code></pre>
+</div>
+</div>
+</section>
+<section id="multiple-sequence-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-sequence-alignment">Multiple Sequence Alignment</h2>
+<p>To align all of our sequences, we’ll use the <strong><code>DECIPHER</code></strong> package.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>msa <span class="ot">&lt;-</span> <span class="fu">AlignSeqs</span>(orthologs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can view this more clearly in the browser.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BrowseSeqs</span>(msa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="building-a-phylogenetic-tree" class="level2">
+<h2 class="anchored" data-anchor-id="building-a-phylogenetic-tree">Building a Phylogenetic Tree</h2>
+<p>Now that we have our alignment, we need to calculate a distance matrix. This will be used to construct our tree.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">DistanceMatrix</span>(msa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>================================================================================
+
+Time difference of 0 secs</code></pre>
+</div>
+</div>
+<p>The <strong><code>ape</code></strong> package allows you to construct trees. We’ll use the Neighbor Joining algorithm.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">nj</span>(dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we can plot our tree.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-msa_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/hshsl-training\.github\.io\/r-for-bioinformatics\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/edit/main/03-msa.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/r-for-bioinformatics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg" class="img-fluid" alt="CC BY" width="125"></a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
